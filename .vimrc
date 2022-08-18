@@ -9,6 +9,8 @@ endif
 call plug#begin('~/.vim/plugged')
     Plug 'drewtempelmeyer/palenight.vim'
     Plug 'preservim/nerdtree'
+    Plug 'junegunn/fzf'
+    Plug 'junegunn/fzf.vim'
 call plug#end()
 
 """ General Configuration
@@ -50,7 +52,11 @@ nnoremap <esc>^[ <esc> ^[
 nnoremap <Leader>\ :NERDTreeToggle<Enter>
 nnoremap <silent> <Leader>v :NERDTreeFind<CR>
 
+" Remove all trailing whitespace by pressing F5
+nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
+
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 " Start NERDTree. If a file is specified, move the cursor to its window.
 autocmd StdinReadPre * let s:std_in=1
 "autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif  
+"
