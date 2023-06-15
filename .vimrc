@@ -31,6 +31,9 @@ set ignorecase
 set autoread
 set mouse=a
 
+""" highlight searches
+set hlsearch
+
 """ Theme and syntax highlighting
 syntax on
 set background=dark
