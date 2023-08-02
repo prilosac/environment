@@ -34,6 +34,13 @@ set mouse=a
 """ highlight searches
 set hlsearch
 
+""" Enable folding
+set foldmethod=indent
+set foldlevel=99
+set foldcolumn=2
+""" Enable folding with spacebar
+nnoremap <space> za
+
 """ Theme and syntax highlighting
 syntax on
 set background=dark
