@@ -58,6 +58,17 @@ let g:palenight_terminal_italics=1
 nnoremap <esc> :noh<return><esc>
 nnoremap <esc>^[ <esc> ^[
 
+" Configure FZF
+let g:fzf_vim = {}
+let g:fzf_vim.preview_window = ['right,50%,<70(up,40%)', 'ctrl-/']
+nnoremap <Leader><Leader> :GFiles<CR>
+nnoremap <Leader>fi       :Files<CR>
+nnoremap <Leader>C        :Colors<CR>
+nnoremap <Leader><CR>     :Buffers<CR>
+nnoremap <Leader>fl       :Lines<CR>
+nnoremap <Leader>ag       :Ag! <C-R><C-W><CR>
+nnoremap <Leader>m        :History<CR>
+
 """ Nerdtree setup
 nnoremap <Leader>\ :NERDTreeToggle<Enter>
 nnoremap <silent> <Leader>v :NERDTreeFind<CR>
