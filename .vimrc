@@ -38,6 +38,7 @@ set hlsearch
 set foldmethod=indent
 set foldlevel=99
 set foldcolumn=2
+set foldignore=
 """ Enable folding with spacebar
 nnoremap <space> za
 

@@ -11,8 +11,19 @@ call plug#begin('~/.vim/plugged')
     Plug 'preservim/nerdtree'
     Plug 'junegunn/fzf'
     Plug 'junegunn/fzf.vim'
+    Plug 'github/copilot.vim'
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'CopilotC-Nvim/CopilotChat.nvim', { 'branch': 'canary' }
 "   Plug 'Exafunction/codeium.vim', { 'branch': 'main' }
 call plug#end()
+
+""" Enable CopilotChat (breaks syntax highlighting in nvim/vim but works correctly, this is known)
+#lua << EOF
+#require("CopilotChat").setup {
+#  debug = true, -- Enable debugging
+#  -- See Configuration section for rest
+#}
+#EOF
 
 """ General Configuration
 let mapleader = " "
