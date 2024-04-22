@@ -18,12 +18,12 @@ call plug#begin('~/.vim/plugged')
 call plug#end()
 
 """ Enable CopilotChat (breaks syntax highlighting in nvim/vim but works correctly, this is known)
-#lua << EOF
-#require("CopilotChat").setup {
-#  debug = true, -- Enable debugging
-#  -- See Configuration section for rest
-#}
-#EOF
+"lua << EOF
+"require("CopilotChat").setup {
+"  debug = true, -- Enable debugging
+"  -- See Configuration section for rest
+"}
+"EOF
 
 """ General Configuration
 let mapleader = " "
