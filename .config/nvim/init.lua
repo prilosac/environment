@@ -164,6 +164,8 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 -- vim.opt.shiftwidth = 4
 -- -- insert 4 spaces when Tab is pressed
 -- vim.opt.expandtab = true
+-- default to 100 col line length
+vim.opt.textwidth = 100
 
 -- Use block cursor in more modes, personal preference
 vim.opt.guicursor = "n-v-ve-i-c-ci-sm:block,r-cr-o:hor20"
