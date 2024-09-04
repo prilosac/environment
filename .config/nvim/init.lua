@@ -977,6 +977,28 @@ require("lazy").setup({
 			})
 		end,
 	},
+	-- { -- Molten
+	--   {
+	--       "benlubas/molten-nvim",
+	--       version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
+	--       dependencies = { "3rd/image.nvim" },
+	--       build = ":UpdateRemotePlugins",
+	--       init = function()
+	--           -- these are examples, not defaults. Please see the readme
+	--           -- vim.g.molten_image_provider = "image.nvim"
+	--           vim.g.molten_output_win_max_height = 30
+
+	--           vim.api.nvim_create_autocmd("User", {
+	--             pattern = "MoltenInitPost",
+	--             callback = function()
+	--               vim.keymap.set("v", "<localleader>r", ":<C-u>MoltenEvaluateVisual<CR>gv",
+	--                 { desc = "execute visual selection", buffer = true, silent = true })
+	--               -- ... more mappings
+	--             end,
+	--           })
+	--       end,
+	--   },
+	-- },
 
 	-- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
 	-- init.lua. If you want these files, they are in the repository, so you can just download them and
