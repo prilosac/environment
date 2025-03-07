@@ -166,6 +166,15 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 -- default to 100 col line length
 -- vim.opt.textwidth = 100
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "html", "javascript", "js", "ts", "tsx" },
+	callback = function()
+		vim.opt_local.shiftwidth = 2
+		vim.opt_local.tabstop = 2
+		vim.opt_local.softtabstop = 2
+		vim.opt_local.expandtab = true
+	end,
+})
 
 -- Use block cursor in more modes, personal preference
 vim.opt.guicursor = "n-v-ve-i-c-ci-sm:block,r-cr-o:hor20"
@@ -1021,41 +1030,7 @@ require("lazy").setup({
 			})
 		end,
 	},
-	-- { -- Copilot
-	--   'github/copilot.vim',
-	-- },
-	{
-		"zbirenbaum/copilot.lua",
-		cmd = "Copilot",
-		event = "InsertEnter",
-		config = function()
-			require("copilot").setup({
-				suggestion = { enabled = false },
-				panel = { enabled = false },
-			})
-		end,
-	},
-	{ -- Copilot Chat
-		"CopilotC-Nvim/CopilotChat.nvim",
-		branch = "main",
-		config = function()
-			require("CopilotChat").setup({
-				context = "buffers",
-			})
-		end,
-	},
-	{
-		"zbirenbaum/copilot-cmp",
-		config = function()
-			require("copilot_cmp").setup()
-		end,
-	},
-	{ -- nvim-colorizer
-		"norcalli/nvim-colorizer.lua",
-		config = function()
-			require("colorizer").setup({ "*" }, { css = true })
-		end,
-	},
+	require("plugins.ai"),
 	-- { -- Molten
 	--   {
 	--       "benlubas/molten-nvim",
