@@ -417,8 +417,7 @@ require("lazy").setup({
 			{ "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
 
 			-- Gives lots of options for jumping around directories within Telescope searches
-			-- { "brookhong/telescope-pathogen.nvim" },
-			{ "prilosac/telescope-pathogen.nvim" },
+			{ "brookhong/telescope-pathogen.nvim" },
 		},
 		config = function()
 			-- Telescope is a fuzzy finder that comes with a lot of different things that
