@@ -483,6 +483,10 @@ require("lazy").setup({
 							"!**/static/*",
 						},
 					},
+					buffers = {
+						sort_lastused = true,
+						sort_mru = true,
+					},
 				},
 				extensions = {
 					fzf = {},
@@ -1040,7 +1044,16 @@ require("lazy").setup({
 						},
 					},
 					lualine_b = { "branch", "diff", "diagnostics" },
-					lualine_c = { "filename" },
+					lualine_c = {
+						{
+							"filename",
+							path = 1,
+							symbols = {
+								modified = "",
+								readonly = "",
+							},
+						},
+					},
 					lualine_x = { "encoding", "fileformat", "filetype" },
 					lualine_y = { "progress" },
 					lualine_z = { "location", "searchcount", "selectioncount" },
@@ -1108,6 +1121,27 @@ require("lazy").setup({
 				filesystem = {
 					filtered_items = {
 						hide_gitignored = false,
+					},
+				},
+				default_component_configs = {
+					modified = {
+						symbol = "",
+						highlight = "NeoTreeModified",
+					},
+					git_status = {
+						symbols = {
+							-- Change type
+							added = "", -- or "✚", but this is redundant info if you use git_status_colors on the name
+							modified = "", -- or "", but this is redundant info if you use git_status_colors on the name
+							deleted = "✖", -- this can only be used in the git_status source
+							renamed = "󰁕", -- this can only be used in the git_status source
+							-- Status type
+							untracked = "",
+							ignored = "",
+							unstaged = "󰄱",
+							staged = "",
+							conflict = "",
+						},
 					},
 				},
 			})
