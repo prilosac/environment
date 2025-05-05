@@ -1061,7 +1061,16 @@ require("lazy").setup({
 				inactive_sections = {
 					lualine_a = {},
 					lualine_b = {},
-					lualine_c = { "filename" },
+					lualine_c = {
+						{
+							"filename",
+							path = 0,
+							symbols = {
+								modified = "",
+								readonly = "",
+							},
+						},
+					},
 					lualine_x = { "location" },
 					lualine_y = { "filesize" },
 					lualine_z = {},
