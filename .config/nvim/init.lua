@@ -484,7 +484,7 @@ require("lazy").setup({
 						},
 					},
 					buffers = {
-						sort_lastused = true,
+						ignore_current_buffer = true,
 						sort_mru = true,
 					},
 				},
