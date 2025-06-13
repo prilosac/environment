@@ -50,10 +50,17 @@ return {
 				auto_suggestions = false,
 			},
 			provider = "copilot",
-			copilot = {
-				model = "claude-3.7-sonnet",
-				temperature = 0,
-				max_tokens = 8192,
+			providers = {
+				copilot = {
+					-- model = "claude-3.7-sonnet",
+					model = "claude-sonnet-4",
+					disable_tools = false,
+					extra_request_body = {
+						temperature = 0.5,
+						max_tokens = 65536,
+						reasoning_effort = "medium",
+					},
+				},
 			},
 		},
 		-- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
@@ -98,11 +105,25 @@ return {
 	},
 	{ -- Copilot Chat
 		"CopilotC-Nvim/CopilotChat.nvim",
+		dependencies = {
+			{ "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
+			{ "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
+		},
 		branch = "main",
 		config = function()
 			require("CopilotChat").setup({
 				context = "buffers",
+				model = "claude-sonnet-4",
 			})
+			vim.api.nvim_create_user_command("CC", function(opts)
+				-- vim.print(opts)
+				local range_prefix = ""
+				if opts.range > 0 then
+					range_prefix = ("%d,%d"):format(opts.line1, opts.line2)
+				end
+
+				vim.cmd(range_prefix .. "CopilotChat " .. opts.args)
+			end, { nargs = "*", range = true })
 		end,
 	},
 	{
