@@ -1252,7 +1252,16 @@ require("lazy").setup({
 							},
 						},
 					},
-					lualine_x = { "encoding", "fileformat", "filetype" },
+					lualine_x = {
+						{
+							"copilot",
+							show_colors = false,
+							symbols = { spinners = "star" },
+						},
+						"encoding",
+						"fileformat",
+						"filetype",
+					},
 					lualine_y = { "progress" },
 					lualine_z = { "location", "searchcount", "selectioncount" },
 				},
