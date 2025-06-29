@@ -126,4 +126,11 @@ return {
 			end, { nargs = "*", range = true })
 		end,
 	},
+	{
+		"AndreM222/copilot-lualine",
+		dependecies = {
+			"nvim-lualine/lualine.nvim",
+			"zbirenbaum/copilot.lua",
+		},
+	},
 }
