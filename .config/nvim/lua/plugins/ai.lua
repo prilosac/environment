@@ -9,21 +9,16 @@ return {
 		event = "InsertEnter",
 		config = function()
 			require("copilot").setup({
-				suggestion = { enabled = false, debounce = 200 },
+				suggestion = { enabled = false, debounce = 50 },
 				panel = { enabled = false },
 			})
 		end,
-		--opts = function(_, opts)
-		--  opts.suggestion = opts.suggestion or {}
-		--  opts.suggestion.debounce = 200
-		--  return opts
-		--end,
 	},
 	{ -- Copilot Chat
 		"CopilotC-Nvim/CopilotChat.nvim",
 		dependencies = {
 			-- { "github/copilot.vim" }, -- or zbirenbaum/copilot.lua
-			{ "github/copilot.lua" },
+			{ "zbirenbaum/copilot.lua" },
 			{ "nvim-lua/plenary.nvim", branch = "master" }, -- for curl, log and async functions
 		},
 		branch = "main",
