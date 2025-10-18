@@ -1140,7 +1140,7 @@ require("lazy").setup({
 						async = true,
 						opts = {},
 					},
-					lazydev = { module = "lazydev.integrations.blink", score_offset = 100, fallback = { "buffer" } },
+					lazydev = { module = "lazydev.integrations.blink", score_offset = 100, fallbacks = { "buffer" } },
 					lsp = { fallbacks = { "buffer" } },
 					buffer = { score_offset = -5 },
 				},
