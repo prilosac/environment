@@ -12,9 +12,6 @@ tmux new-session -d -s "$SESSION_NAME" -c "$WORK_DIR"
 # Split first window vertically (top/bottom)
 tmux split-window -v -t "$SESSION_NAME:0" -c "$WORK_DIR"
 
-# Launch neovim in the top pane
-tmux send-keys -t "$SESSION_NAME:0.0" "nvim" Enter
-
 # Create second window with single pane
 tmux new-window -t "$SESSION_NAME" -c "$WORK_DIR"
 
@@ -23,6 +20,9 @@ tmux select-window -t "$SESSION_NAME:0"
 
 # Select the first pane of the first window
 tmux select-pane -t "$SESSION_NAME:0.0"
+
+## Launch neovim after attach (in background so attach happens first)
+#tmux send-keys -t "$SESSION_NAME:0.0" "nvim" Enter
 
 # Attach to session
 tmux attach-session -t "$SESSION_NAME"
