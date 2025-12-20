@@ -21,5 +21,8 @@ tmux new-window -t "$SESSION_NAME" -c "$WORK_DIR"
 # Select the first window
 tmux select-window -t "$SESSION_NAME:0"
 
+# Select the first pane of the first window
+tmux select-pane -t "$SESSION_NAME:0.0"
+
 # Attach to session
 tmux attach-session -t "$SESSION_NAME"
