@@ -13,7 +13,7 @@ if [ ! -f ~/.tmux.conf ] || ! cmp -s ./tmux/.tmux.conf ~/.tmux.conf; then
     echo "✓ Installed tmux configuration"
 fi
 
-# 2. Move plugins/ai.lua to the correct location
+# 2. Move the tmux-dev script to the correct location
 if [ ! -f "$TMUX_SCRIPT_PATH" ] || ! cmp -s ./tmux/tmux-dev "$TMUX_SCRIPT_PATH"; then
     cp ./tmux/tmux-dev "$TMUX_SCRIPT_PATH"
     echo "✓ Installed tmux-dev script to $TMUX_SCRIPT_PATH"
