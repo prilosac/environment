@@ -31,7 +31,18 @@ if [ ! -f ~/.config/nvim/init.lua ] || ! cmp -s .config/nvim/init.lua ~/.config/
     echo "✓ Installed Neovim configuration"
 fi
 
-# 5. Move plugins/ai.lua to the correct location
+# 5. Ask about personal formatting preferences
+read -p "Enable personal formatting preferences (Python: isort + black)? [y/N] " enable_personal_formatting
+if [[ "$enable_personal_formatting" =~ ^[Yy]$ ]]; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        sed -i '' "s/-- python = { 'isort', 'black' },/python = { 'isort', 'black' },/" ~/.config/nvim/init.lua
+    else
+        sed -i "s/-- python = { 'isort', 'black' },/python = { 'isort', 'black' },/" ~/.config/nvim/init.lua
+    fi
+    echo "✓ Enabled personal Python formatting (isort + black)"
+fi
+
+# 6. Move plugins/ai.lua to the correct location
 if [ ! -f ~/.config/nvim/lua/plugins/ai.lua ] || ! cmp -s .config/nvim/lua/plugins/ai.lua ~/.config/nvim/lua/plugins/ai.lua; then
     cp .config/nvim/lua/plugins/ai.lua ~/.config/nvim/lua/plugins
     echo "✓ Installed custom 'ai' plugin configuration"
