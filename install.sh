@@ -48,4 +48,16 @@ if [ ! -f ~/.config/nvim/lua/plugins/ai.lua ] || ! cmp -s .config/nvim/lua/plugi
     echo "✓ Installed custom 'ai' plugin configuration"
 fi
 
+# 7. Create ~/.config/opencode directory if it doesn't exist
+if [ ! -d ~/.config/opencode/ ]; then
+    mkdir -p ~/.config/opencode
+    echo "✓ Created OpenCode configuration directory"
+fi
+
+# 8. Move opencode.jsonc to the correct location
+if [ ! -f ~/.config/opencode/opencode.json ] || ! cmp -s .config/opencode/opencode.jsonc ~/.config/opencode/opencode.jsonc; then
+    cp .config/opencode/opencode.jsonc ~/.config/opencode/
+    echo "✓ Installed OpenCode configuration"
+fi
+
 echo "🎉 Installation complete!"
