@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SESSION_NAME="dev"
+SESSION_NAME="${2:-dev}"
 WORK_DIR="${1:-$PWD}"
 
 # Kill existing session if it exists
