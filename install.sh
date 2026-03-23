@@ -9,7 +9,7 @@ echo "Starting environment setup..."
 
 # 1. Move .tmux.conf to home directory
 if [ ! -f ~/.tmux.conf ] || ! cmp -s ./tmux/.tmux.conf ~/.tmux.conf; then
-    cp .tmux.conf ~/
+    cp ./tmux/.tmux.conf ~/
     echo "✓ Installed tmux configuration"
 fi
 
