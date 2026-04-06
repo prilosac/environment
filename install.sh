@@ -60,4 +60,22 @@ if [ ! -f ~/.config/opencode/opencode.json ] || ! cmp -s .config/opencode/openco
     echo "✓ Installed OpenCode configuration"
 fi
 
+# 9. Create ~/.config/opencode/skills directory if it doesn't exist and install missing skills
+if [ ! -d ~/.config/opencode/skills ]; then
+    mkdir -p ~/.config/opencode/skills
+    echo "✓ Created OpenCode skills directory"
+fi
+
+for skill_dir in .config/opencode/skills/*; do
+    [ -d "$skill_dir" ] || continue
+
+    skill_name="$(basename "$skill_dir")"
+    target_skill_dir="$HOME/.config/opencode/skills/$skill_name"
+
+    if [ ! -d "$target_skill_dir" ]; then
+        cp -r "$skill_dir" "$target_skill_dir"
+        echo "✓ Installed OpenCode skill: $skill_name"
+    fi
+done
+
 echo "🎉 Installation complete!"
