@@ -231,15 +231,6 @@ local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
 -- [[ Configure and install plugins ]]
---
---  To check the current status of your plugins, run
---    :Lazy
---
---  You can press `?` in this menu for help. Use `:q` to close the window
---
---  To update plugins you can run
---    :Lazy update
---
 -- NOTE: Here is where you install your plugins.
 require("lazy").setup({
 	-- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
@@ -389,7 +380,7 @@ require("lazy").setup({
 	{ -- Fuzzy Finder (files, lsp, etc)
 		"nvim-telescope/telescope.nvim",
 		event = "VimEnter",
-		branch = "0.1.x",
+		version = "*",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			{ -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -1321,8 +1312,9 @@ require("lazy").setup({
 	},
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
+		branch = "main",
 		build = ":TSUpdate",
-		main = "nvim-treesitter.configs", -- Sets main module to use for opts
+		main = "nvim-treesitter.config", -- Sets main module to use for opts
 		opts = {
 			ensure_installed = {
 				"bash",
@@ -1354,7 +1346,7 @@ require("lazy").setup({
 			-- Prefer git instead of curl in order to improve connectivity in some environments
 			require("nvim-treesitter.install").prefer_git = true
 			---@diagnostic disable-next-line: missing-fields
-			require("nvim-treesitter.configs").setup(opts)
+			require("nvim-treesitter.config").setup(opts)
 
 			-- There are additional nvim-treesitter modules that you can use to interact
 			-- with nvim-treesitter. You should go explore a few and see what interests you:
@@ -1433,29 +1425,6 @@ require("lazy").setup({
 		end,
 	},
 	require("plugins.ai"),
-	-- { -- Molten
-	--   {
-	--       "benlubas/molten-nvim",
-	--       version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
-	--       dependencies = { "3rd/image.nvim" },
-	--       build = ":UpdateRemotePlugins",
-	--       init = function()
-	--           -- these are examples, not defaults. Please see the readme
-	--           -- vim.g.molten_image_provider = "image.nvim"
-	--           vim.g.molten_output_win_max_height = 30
-
-	--           vim.api.nvim_create_autocmd("User", {
-	--             pattern = "MoltenInitPost",
-	--             callback = function()
-	--               vim.keymap.set("v", "<localleader>r", ":<C-u>MoltenEvaluateVisual<CR>gv",
-	--                 { desc = "execute visual selection", buffer = true, silent = true })
-	--               -- ... more mappings
-	--             end,
-	--           })
-	--       end,
-	--   },
-	-- },
-
 	-- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
 	-- init.lua. If you want these files, they are in the repository, so you can just download them and
 	-- place them in the correct locations.
