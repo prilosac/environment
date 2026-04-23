@@ -2,6 +2,8 @@
 
 SESSION_NAME="${2:-dev}"
 WORK_DIR="${1:-$PWD}"
+WORK_DIR="${WORK_DIR/#\~/$HOME}"
+WORK_DIR="$(realpath "$WORK_DIR")"
 
 # Kill existing session if it exists
 tmux kill-session -t "$SESSION_NAME" 2>/dev/null
