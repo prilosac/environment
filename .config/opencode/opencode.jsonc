@@ -2,36 +2,45 @@
   "$schema": "https://opencode.ai/config.json",
   // Theme configuration
   "theme": "catppuccin-macchiato",
-  "model": "anthropic/claude-opus-4-5",
-  //"model": "anthropic/claude-sonnet-4-5",
   "autoupdate": true,
+  "permission": {
+    "edit": {
+      "*": "ask",
+      "*.md": "allow",
+      "*.py": "ask"
+    },
+    "bash": {
+      "rm *": "deny",
+      "*": "ask",
+      "ls *": "allow",
+      "rg *": "allow",
+      "grep *": "allow",
+      "git log *": "allow",
+      "git diff *": "allow",
+      "git show *": "allow",
+      "git status *": "allow",
+      "git branch --show-current": "allow",
+      "git branch --list": "allow",
+      "git branch -a": "allow",
+      "git remote show origin": "allow",
+      "uv run pytest*": "allow",
+      "find *": "allow",
+      "sort *": "allow",
+      "echo *": "allow",
+      "echo $*": "ask",
+      "python scan_claimfile.py *": "allow",
+      "python medscan_claimfile.py *": "allow"
+    },
+    "webfetch": "ask",
+    "doom_loop": "ask",
+    "external_directory": "ask"
+  },
   "agent": {
     "build": {
       "permission": {
-        "edit": {
-          "*": "ask",
-          "*.md": "allow",
-          "*.py": "ask",
-        },
-        "bash": {
-          "rm *": "deny",
-          "*": "ask",
-          "ls *": "allow",
-          "rg *": "allow",
-          "grep *": "allow",
-          "git log *": "allow",
-          "git diff *": "allow",
-          "git show *": "allow",
-          "git status *": "allow",
-          "git branch --show-current": "allow",
-          "git branch --list": "allow",
-          "git branch -a": "allow",
-          "git remote show origin": "allow",
-          "uv run pytest*": "allow",
-        },
-        "webfetch": "ask",
-        "doom_loop": "ask",
-        "external_directory": "ask"
+        "external_directory": {
+          "/tmp/loader-builder/**": "allow"
+        }
       }
     },
     "plan": {
@@ -39,28 +48,9 @@
         "edit": {
           "*": "deny",
           "*.md": "allow",
-          "*.py": "ask",
-        },
-        "bash": {
-          "rm *": "deny",
-          "*": "ask",
-          "ls *": "allow",
-          "rg *": "allow",
-          "grep *": "allow",
-          "git log *": "allow",
-          "git diff *": "allow",
-          "git show *": "allow",
-          "git status *": "allow",
-          "git branch --show-current": "allow",
-          "git branch --list": "allow",
-          "git branch -a": "allow",
-          "git remote show origin": "allow",
-          "uv run pytest*": "allow",
-        },
-        "webfetch": "ask",
-        "doom_loop": "ask",
-        "external_directory": "ask"
+          "*.py": "ask"
+        }
       }
-    },
-  },
+    }
+  }
 }
