@@ -3,6 +3,18 @@
   // Theme configuration
   "theme": "catppuccin-macchiato",
   "autoupdate": true,
+  "mcp": {
+    "asana": {
+      "type": "remote",
+      "url": "https://mcp.asana.com/v2/mcp",
+      //"enabled": true,
+      "oauth": {
+        "clientId": "1216135129131473",
+        "clientSecret": "c4f91e3487a1225d1363e7d57322dd0f",
+        "scope": "tools:read tools:execute"
+      }
+    }
+  },
   "permission": {
     "edit": {
       "*": "ask",
