@@ -45,7 +45,15 @@
     },
     "webfetch": "ask",
     "doom_loop": "ask",
-    "external_directory": "ask"
+    "external_directory": "ask",
+    // Asana MCP (remote server "asana"): gate every destructive/mutating tool.
+    // Read-only tools (asana_get_*, asana_search_*, *_preview) stay ungated.
+    "asana_create_tasks": "ask",
+    "asana_create_project": "ask",
+    "asana_create_project_status_update": "ask",
+    "asana_add_comment": "ask",
+    "asana_update_tasks": "ask",
+    "asana_delete_task": "ask"
   },
   "agent": {
     "build": {
