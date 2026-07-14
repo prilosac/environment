@@ -24,6 +24,8 @@
     "bash": {
       "rm *": "deny",
       "*": "ask",
+      "cat *": "allow",
+      "cat *.env": "deny",
       "ls *": "allow",
       "rg *": "allow",
       "wc *": "allow",
