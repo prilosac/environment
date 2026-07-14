@@ -56,7 +56,7 @@ fi
 
 # 8. Move opencode.jsonc to the correct location
 if [ ! -f ~/.config/opencode/opencode.json ] || ! cmp -s .config/opencode/opencode.jsonc ~/.config/opencode/opencode.jsonc; then
-    cp .config/opencode/opencode.jsonc ~/.config/opencode/
+    cp .config/opencode/opencode.jsonc ~/.config/opencode/ || true
     echo "✓ Installed OpenCode configuration"
 fi
 
