@@ -52,7 +52,8 @@
       "echo $*": "ask",
       "python scan_claimfile.py *": "allow",
       "python medscan_claimfile.py *": "allow",
-      "npm run*": "allow"
+      "npm run*": "allow",
+      "python -m unittest*": "allow"
     },
     "webfetch": "ask",
     "doom_loop": "ask",
