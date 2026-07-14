@@ -55,6 +55,7 @@
       "python scan_claimfile.py *": "allow",
       "python medscan_claimfile.py *": "allow",
       "npm run*": "allow",
+      "npm test": "allow",
       "python -m unittest*": "allow"
     },
     "webfetch": "ask",
