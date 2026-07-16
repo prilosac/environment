@@ -26,6 +26,8 @@
       "*": "ask",
       "cat *": "allow",
       "cat *.env": "deny",
+      "tail *": "allow",
+      "tail *.env": "deny",
       "ls *": "allow",
       "rg *": "allow",
       "wc *": "allow",
