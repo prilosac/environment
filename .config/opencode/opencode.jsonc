@@ -41,6 +41,8 @@
       "wc *": "allow",
       "grep *": "allow",
       "head *": "allow",
+      "gh *": "ask",
+      "gh pr *": "allow",
       "git blame *": "allow",
       "git branch*": "allow",
       "git branch -d*": "ask",
