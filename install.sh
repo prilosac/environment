@@ -3,7 +3,7 @@
 # Exit on any error
 set -e
 
-TMUX_SCRIPT_PATH="$HOME/.local/bin/tmux-dev"
+TMUX_SCRIPT_PATH="$HOME/.local/bin"
 
 echo "Starting environment setup..."
 
@@ -14,9 +14,10 @@ if [ ! -f ~/.tmux.conf ] || ! cmp -s ./tmux/.tmux.conf ~/.tmux.conf; then
 fi
 
 # 2. Move the tmux-dev script to the correct location
-if [ ! -f "$TMUX_SCRIPT_PATH" ] || ! cmp -s ./tmux/tmux-dev "$TMUX_SCRIPT_PATH"; then
-    cp ./tmux/tmux-dev "$TMUX_SCRIPT_PATH"
-    echo "✓ Installed tmux-dev script to $TMUX_SCRIPT_PATH"
+if [ ! -f "${TMUX_SCRIPT_PATH}/tmux-dev" ] || ! cmp -s ./tmux/tmux-dev "${TMUX_SCRIPT_PATH}/tmux-dev"; then
+    mkdir -p $TMUX_SCRIPT_PATH
+    cp ./tmux/tmux-dev "${TMUX_SCRIPT_PATH}/tmux-dev"
+    echo "✓ Installed tmux-dev script to ${TMUX_SCRIPT_PATH}/tmux-dev"
 fi
 
 # 3. Create ~/.config/nvim directory if it doesn't exist
