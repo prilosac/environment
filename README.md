@@ -13,7 +13,9 @@ Many tools place their configurations in $XDG_CONFIG_HOME which defaults to $HOM
 This repo also contains an installer, `./install`, that will sensibly copy configurations to the correct locations, with opportunities to guide the install (e.g. optionally exclude `black` python formatting on a work machine)
 
 ## Quickstart
-```./install.sh```
+```bash
+./install.sh
+```
 
 ## Neovim
 Neovim configuration is stored at the canonical `.config/nvim/`. `init.lua` is the main entrypoint, and subsets of plugin configurations are stored at `.config/nvim/lua/plugins/<plugin>.lua`.
