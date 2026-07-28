@@ -10,6 +10,8 @@ These configs cover a few main tools
 
 Many tools place their configurations in $XDG_CONFIG_HOME which defaults to $HOME/.config. For this reason, those configurations are stored in .config in this repo as well.
 
+`.vimrc` is a legacy configuration for pure vim and is not deployed by `install.sh`. It's kept around in case somewhere vim is available but neovim isn't.
+
 This repo also contains an installer, `./install`, that will sensibly copy configurations to the correct locations, with opportunities to guide the install (e.g. optionally exclude `black` python formatting on a work machine)
 
 ## Quickstart
@@ -21,7 +23,7 @@ This repo also contains an installer, `./install`, that will sensibly copy confi
 Neovim configuration is stored at the canonical `.config/nvim/`. `init.lua` is the main entrypoint, and subsets of plugin configurations are stored at `.config/nvim/lua/plugins/<plugin>.lua`.
 
 ## tmux
-tmux configuration is stored at `tmux/`. `.tmux.conf` is the standard tmux config file that gets copied to `~/`. `tmux-dev` is a custom launch script that launches tmux in a specified directory with a specified session name and sets up the session with two windows where the first window is split into top-bottom panes. This gets installed to `~/.local/bin`.
+tmux configuration is stored at `tmux/`. `.tmux.conf` is the standard tmux config file that gets copied to `~/`. `tmux-dev [work_dir] [session_name]` is a custom launch script that launches tmux in a specified directory with a specified session name and sets up the session with two windows where the first window is split into top-bottom panes. This gets installed to `~/.local/bin`.
 
 ## OpenCode
 OpenCode configuration is stored at the canonical `.config/opencode/`. There are two main pieces of this configuration: the config file and skills
