@@ -1,36 +1,89 @@
 # environment
 
-This is a respository for managing my personal environment configurations, and includes both the configurations themselves and an installer that sensibly puts them in the right place. Many similar repositories are known as "dotfiles" repositories.
+This is a repository for managing my personal environment configurations, and includes both the configurations themselves and an installer that sensibly puts them in the right place. Many similar repositories are known as "dotfiles" repositories.
 
 ## Structure
+
 These configs cover a few main tools
+
 - Neovim
 - tmux
 - OpenCode
+- Agent skills (shared by OpenCode and Claude Code)
 
-Many tools place their configurations in $XDG_CONFIG_HOME which defaults to $HOME/.config. For this reason, those configurations are stored in .config in this repo as well.
+Directories in this repo mirror where their contents land: `.config/` installs into `~/.config`, `agents/` installs into `~/.agents`, and `tmux/` is grouped by tool (its two files land in `~` and `~/.local/bin`).
 
 `.vimrc` is a legacy configuration for pure vim and is not deployed by `install.sh`. It's kept around in case somewhere vim is available but neovim isn't.
 
-This repo also contains an installer, `./install`, that will sensibly copy configurations to the correct locations, with opportunities to guide the install (e.g. optionally exclude `black` python formatting on a work machine)
-
 ## Quickstart
+
 ```bash
 ./install.sh
 ```
 
+With no arguments you get an interactive menu: toggle modules by number, `d` for a dry run, Enter to install. Defaults come from the last profile you used (or `personal`).
+
+Non-interactive, e.g. on a fresh work machine:
+
+```bash
+./install.sh --profile work --yes
+```
+
+### Flags
+
+| Flag | Effect |
+| --- | --- |
+| `--profile personal\|work` | select a profile (see below) |
+| `--only a,b` | install only these modules |
+| `--skip a,b` | install everything except these |
+| `--dry-run` | print the full plan, touch nothing |
+| `--link` / `--copy` | override the install mode |
+| `--yes` | no menu, no questions — take profile defaults |
+| `--list` | show modules and current selection |
+
+`--only` and `--skip` both take any comma-separated list of module names, so `--only opencode` and `--skip nvim-ai,tmux` are equally valid. `./install.sh --list` prints the module names.
+
+The modules are `tmux`, `nvim`, `nvim-ai`, `opencode`, `agents-skills`, and `claude-skills`.
+
+`./install.sh render opencode [--profile work]` prints the fully resolved OpenCode config to stdout without installing anything.
+
+### Profiles and modes
+
+Both profiles install all modules; they differ in *how*:
+
+- **personal** — **link mode** (files are symlinked into place, so edits in this repo are live), OpenCode base config only, Python formatting on.
+- **work** — **copy mode**, merges the `work` OpenCode overlay, Python formatting off.
+
+Generated files (the merged OpenCode config, nvim's machine-local overrides) are always real files, never symlinks. Any file the installer replaces is first backed up to `~/.environment-backups/<timestamp>/`.
+
 ## Neovim
+
 Neovim configuration is stored at the canonical `.config/nvim/`. `init.lua` is the main entrypoint, and subsets of plugin configurations are stored at `.config/nvim/lua/plugins/<plugin>.lua`.
 
+Machine-specific choices (currently: whether conform runs `isort` + `black` on Python) live in `~/.config/nvim/lua/local/overrides.lua`, read by `init.lua` via `require("local.overrides")`.
+
+The installer seeds that file from one of the tracked templates in `.config/nvim/overrides/`:
+
+- `with-python-formatting.lua` — conform runs `isort` + `black` on Python buffers.
+- `without-python-formatting.lua` — no Python formatters; conform falls back to the LSP.
+
+It picks based on the question it asks at install time (or the profile default with `--yes`), copies it once, and never touches it again — so the installed copy is yours to edit per machine, while the templates stay versioned here.
+
 ## tmux
-tmux configuration is stored at `tmux/`. `.tmux.conf` is the standard tmux config file that gets copied to `~/`. `tmux-dev [work_dir] [session_name]` is a custom launch script that launches tmux in a specified directory with a specified session name and sets up the session with two windows where the first window is split into top-bottom panes. This gets installed to `~/.local/bin`.
+
+tmux configuration is stored at `tmux/`. `.tmux.conf` is the standard tmux config file that gets installed to `~/`. `tmux-dev [work_dir] [session_name]` is a custom launch script that launches tmux in a specified directory with a specified session name and sets up the session with two windows where the first window is split into top-bottom panes. This gets installed to `~/.local/bin`.
 
 ## OpenCode
-OpenCode configuration is stored at the canonical `.config/opencode/`. There are two main pieces of this configuration: the config file and skills
 
-### Configuration file
-This is stored directly in `./config/opencode/` and holds the overall JSON configuration for the OpenCode agent harness.
+OpenCode configuration is stored at `.config/opencode/` as two layers:
 
-### Skills
-These are stored at `.config/opencode/skills`. Each folder is an Agent Skill - specific documentation of the Skills specification can be found at [AgentSkills.io](https://agentskills.io/home)
+- `base.jsonc` — machine-agnostic config (theme, generic permissions, agent settings).
+- `work.jsonc` — work overlay: the bedrock provider, the Asana MCP server and its permission gates, and work-project permission rules.
 
+With no overlay (personal profile) `base.jsonc` is installed directly as `~/.config/opencode/opencode.jsonc`. With the work profile the two layers are deep-merged with `jq` into a generated `~/.config/opencode/opencode.json` — edit the repo files, not the generated one; the installer detects and backs up hand-edits on the next run. Merging requires `jq`. Comments in these files must be full-line `//` comments (the merge strips them line-wise).
+
+The Asana MCP client secret is **not** stored in this repo. `work.jsonc` references it as `{env:ASANA_CLIENT_SECRET}`, which OpenCode substitutes at runtime — export it in your work shell profile.
+
+## Agent skills
+
+Skills are stored at `agents/skills/`, one directory per skill following the [Agent Skills](https://agentskills.io/home) specification. They install to `~/.agents/skills/`, which OpenCode reads natively. Claude Code doesn't read `~/.agents`, so the `claude-skills` module symlinks each skill into `~/.claude/skills/<name>` pointing back at `~/.agents/skills/<name>` — one source of truth, two consumers.

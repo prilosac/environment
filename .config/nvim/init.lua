@@ -52,6 +52,12 @@ vim.g.maplocalleader = " "
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
+-- allows for env-specific overrides (e.g. no `black` or `isort` at work)
+local overrides_ok, local_config = pcall(require, "local.overrides")
+if not overrides_ok then
+	local_config = {}
+end
+
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
@@ -903,7 +909,8 @@ require("lazy").setup({
 			formatters_by_ft = {
 				lua = { "stylua" },
 				-- Conform can also run multiple formatters sequentially
-				-- python = { 'isort', 'black' },
+				-- see overrides/ (no `black` or `isort` at work)
+				python = local_config.python_formatters,
 				--
 				-- You can use a sub-list to tell conform to run *until* a formatter
 				-- is found.
