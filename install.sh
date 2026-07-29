@@ -21,7 +21,9 @@ set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/environment"
-BACKUP_DIR="$HOME/.environment-backups/$(date +%Y%m%d-%H%M%S)"
+BACKUP_ROOT="$HOME/.environment-backups"
+BACKUP_DIR="$BACKUP_ROOT/$(date +%Y%m%d-%H%M%S)"
+BACKUP_KEEP=5         # timestamped backup dirs to keep, including this run's
 
 ALL_MODULES="tmux nvim nvim-ai opencode agents-skills claude-skills"
 
@@ -62,7 +64,7 @@ record() {
 			UNCHANGED=$((UNCHANGED + 1))
 			;;
 		backup) color="$C_YELLOW" ;;
-		remove)
+		remove | prune)
 			color="$C_YELLOW"
 			CHANGED=$((CHANGED + 1))
 			;;
@@ -71,11 +73,34 @@ record() {
 	printf "  %s%-10s%s %s%s\n" "$color" "$status" "$C_RESET" "${dest/#$HOME/~}" "${detail:+  ${C_DIM}($detail)$C_RESET}"
 }
 
+# Delete the oldest backup dirs so that this run's, once created, is one of at
+# most $BACKUP_KEEP. Only touches names matching our timestamp shape, so
+# anything else dropped in the backup root is left alone.
+prune_backups() {
+	[ -d "$BACKUP_ROOT" ] || return 0
+	local dirs=() d
+	# The glob expands in lexicographic order, which for timestamps is oldest-first.
+	for d in "$BACKUP_ROOT"/[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9][0-9][0-9]; do
+		[ -d "$d" ] || continue # unmatched glob stays literal
+		[ "$d" = "$BACKUP_DIR" ] && continue
+		dirs+=("$d")
+	done
+	local keep=$((BACKUP_KEEP - 1)) i
+	for ((i = 0; i < ${#dirs[@]} - keep; i++)); do
+		run rm -rf "${dirs[i]}"
+		record prune "${dirs[i]}" "keeping $BACKUP_KEEP most recent"
+	done
+}
+
 # Copy a file/dir into the timestamped backup tree before it gets replaced.
 backup_file() {
 	local f="$1" rel="${1#"$HOME"/}"
 	BACKUPS=$((BACKUPS + 1))
 	record backup "$f" "-> ${BACKUP_DIR/#$HOME/~}/$rel"
+	# Prune once per run, as this run's backup dir comes into existence.
+	if [ "$BACKUPS" = 1 ]; then
+		prune_backups
+	fi
 	[ "$DRY_RUN" = 1 ] && return 0
 	mkdir -p "$BACKUP_DIR/$(dirname "$rel")"
 	cp -R "$f" "$BACKUP_DIR/$rel"

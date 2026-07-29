@@ -63,7 +63,7 @@ How files get installed is independent of the profile:
 
 Mode isn't remembered between runs the way the profile is, so pass `--copy` every time you want it; a re-run without it converts the install back to symlinks (backing up each file first).
 
-In both modes this repo is the source of truth: re-running the installer paves over whatever is on the machine, so nothing drifts. The one exception is the merged OpenCode config, which has no single source file and is therefore always generated rather than linked. Any file the installer replaces is first backed up to `~/.environment-backups/<timestamp>/`.
+In both modes this repo is the source of truth: re-running the installer paves over whatever is on the machine, so nothing drifts. The one exception is the merged OpenCode config, which has no single source file and is therefore always generated rather than linked. Any file the installer replaces is first backed up to `~/.environment-backups/<timestamp>/`. Only the 5 most recent of those directories are kept — older ones are pruned on the next run that actually backs something up.
 
 ## Neovim
 
