@@ -10,10 +10,12 @@
 #   ./install.sh --dry-run                show the full plan, touch nothing
 #   ./install.sh render opencode          print the resolved opencode config
 #
-# Modules install from this repo to their canonical destinations. In link mode
-# (personal default) files are symlinked so repo edits are live; in copy mode
-# (work default) files are copied. Either way the repo is the source of truth;
-# re-running paves over what's on the machine
+# Modules install from this repo to their canonical destinations. By default
+# files are symlinked, so repo edits are live everywhere. --copy instead copies
+# them for a self-contained install that survives deleting this checkout.
+# Either way the repo is the source of truth; re-running paves over what's on
+# the machine. Mode is independent of profile, and is not remembered between
+# runs — pass --copy each time you want it.
 
 set -euo pipefail
 
@@ -317,18 +319,14 @@ install_claude_skills() {
 
 apply_profile() {
 	case "$1" in
+		# Profiles select content only — which overlay, which overrides
 		personal)
 			ENABLED="$ALL_MODULES"
-			MODE=link
 			OPENCODE_OVERLAY=""
 			NVIM_PY_FMT=yes
 			;;
 		work)
-			# Same modules as personal; differs only in how they're installed:
-			# copied rather than linked, with the work opencode overlay and no
-			# personal Python formatting.
 			ENABLED="$ALL_MODULES"
-			MODE=copy
 			OPENCODE_OVERLAY=work
 			NVIM_PY_FMT=no
 			;;

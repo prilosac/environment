@@ -37,7 +37,7 @@ Non-interactive, e.g. on a fresh work machine:
 | `--only a,b` | install only these modules |
 | `--skip a,b` | install everything except these |
 | `--dry-run` | print the full plan, touch nothing |
-| `--link` / `--copy` | override the install mode |
+| `--copy` | copy files instead of symlinking (`--link` is the default) |
 | `--yes` | no menu, no questions — take profile defaults |
 | `--list` | show modules and current selection |
 
@@ -47,12 +47,21 @@ The modules are `tmux`, `nvim`, `nvim-ai`, `opencode`, `agents-skills`, and `cla
 
 `./install.sh render opencode [--profile work]` prints the fully resolved OpenCode config to stdout without installing anything.
 
-### Profiles and modes
+### Profiles
 
-Both profiles install all modules; they differ in *how*:
+Both profiles install all modules; they differ only in *content*:
 
-- **personal** — **link mode** (files are symlinked into place, so edits in this repo are live), OpenCode base config only, Python formatting on.
-- **work** — **copy mode**, merges the `work` OpenCode overlay, Python formatting off.
+- **personal** — OpenCode base config only, Python formatting on.
+- **work** — merges the `work` OpenCode overlay, Python formatting off.
+
+### Modes
+
+How files get installed is independent of the profile:
+
+- **link** (default) — files are symlinked into place, so edits in this repo are live and a `git pull` updates your config without re-installing.
+- **copy** (`--copy`) — files are copied, giving a self-contained install that keeps working if you delete this checkout. Useful for a one-shot bootstrap on a machine where the repo won't stick around.
+
+Mode isn't remembered between runs the way the profile is, so pass `--copy` every time you want it; a re-run without it converts the install back to symlinks (backing up each file first).
 
 In both modes this repo is the source of truth: re-running the installer paves over whatever is on the machine, so nothing drifts. The one exception is the merged OpenCode config, which has no single source file and is therefore always generated rather than linked. Any file the installer replaces is first backed up to `~/.environment-backups/<timestamp>/`.
 
