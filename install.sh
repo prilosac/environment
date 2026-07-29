@@ -12,8 +12,8 @@
 #
 # Modules install from this repo to their canonical destinations. In link mode
 # (personal default) files are symlinked so repo edits are live; in copy mode
-# (work default) files are copied. Generated files (merged opencode config,
-# nvim local overrides) are always real files, never links.
+# (work default) files are copied. Either way the repo is the source of truth;
+# re-running paves over what's on the machine
 
 set -euo pipefail
 
@@ -55,7 +55,7 @@ ensure_dir() { [ -d "$1" ] || run mkdir -p "$1"; }
 record() {
 	local status="$1" dest="$2" detail="${3:-}" color="$C_GREEN"
 	case "$status" in
-		unchanged | preserved)
+		unchanged)
 			color="$C_DIM"
 			UNCHANGED=$((UNCHANGED + 1))
 			;;
@@ -175,7 +175,7 @@ make_link() {
 module_desc() {
 	case "$1" in
 		tmux) echo "tmux config + tmux-dev launcher" ;;
-		nvim) echo "Neovim core config (+ machine-local overrides)" ;;
+		nvim) echo "Neovim core config (+ env-specific overrides)" ;;
 		nvim-ai) echo "Neovim AI plugins (copilot)" ;;
 		opencode) echo "OpenCode config (base${OPENCODE_OVERLAY:+ + $OPENCODE_OVERLAY overlay})" ;;
 		agents-skills) echo "agent skills -> ~/.agents/skills" ;;
@@ -193,14 +193,9 @@ install_tmux() {
 install_nvim() {
 	install_file ".config/nvim/init.lua" "$HOME/.config/nvim/init.lua"
 
-	# Machine-local overrides: seeded once from a tracked template in
-	# .config/nvim/overrides/, then owned by the machine. Always a real file —
-	# never a link, so editing it can't write back into the repo.
-	local ov="$HOME/.config/nvim/lua/local/overrides.lua"
-	if [ -e "$ov" ]; then
-		record preserved "$ov" "machine-local, never overwritten"
-		return 0
-	fi
+	# Environment-specific overrides, installed like everything else: the repo is
+	# the source of truth, so re-running paves over whatever is on the machine.
+	# Which template gets installed is the only choice here.
 	local fmt="$NVIM_PY_FMT"
 	if can_prompt; then
 		if confirm "Enable personal Python formatting (isort + black)?" "$fmt"; then fmt=yes; else fmt=no; fi
@@ -209,10 +204,7 @@ install_nvim() {
 	if [ "$fmt" = yes ]; then
 		tmpl=".config/nvim/overrides/with-python-formatting.lua"
 	fi
-	record write "$ov" "from $tmpl"
-	[ "$DRY_RUN" = 1 ] && return 0
-	mkdir -p "$(dirname "$ov")"
-	cp "$REPO_DIR/$tmpl" "$ov"
+	install_file "$tmpl" "$HOME/.config/nvim/lua/local/overrides.lua"
 }
 
 install_nvim_ai() {

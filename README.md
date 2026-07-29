@@ -54,20 +54,20 @@ Both profiles install all modules; they differ in *how*:
 - **personal** — **link mode** (files are symlinked into place, so edits in this repo are live), OpenCode base config only, Python formatting on.
 - **work** — **copy mode**, merges the `work` OpenCode overlay, Python formatting off.
 
-Generated files (the merged OpenCode config, nvim's machine-local overrides) are always real files, never symlinks. Any file the installer replaces is first backed up to `~/.environment-backups/<timestamp>/`.
+In both modes this repo is the source of truth: re-running the installer paves over whatever is on the machine, so nothing drifts. The one exception is the merged OpenCode config, which has no single source file and is therefore always generated rather than linked. Any file the installer replaces is first backed up to `~/.environment-backups/<timestamp>/`.
 
 ## Neovim
 
 Neovim configuration is stored at the canonical `.config/nvim/`. `init.lua` is the main entrypoint, and subsets of plugin configurations are stored at `.config/nvim/lua/plugins/<plugin>.lua`.
 
-Machine-specific choices (currently: whether conform runs `isort` + `black` on Python) live in `~/.config/nvim/lua/local/overrides.lua`, read by `init.lua` via `require("local.overrides")`.
+Environment-specific choices (currently: whether conform runs `isort` + `black` on Python) live in `~/.config/nvim/lua/local/overrides.lua`, read by `init.lua` via `require("local.overrides")`. A missing file falls back to defaults.
 
-The installer seeds that file from one of the tracked templates in `.config/nvim/overrides/`:
+That file is installed from one of the tracked variants in `.config/nvim/overrides/`:
 
 - `with-python-formatting.lua` — conform runs `isort` + `black` on Python buffers.
 - `without-python-formatting.lua` — no Python formatters; conform falls back to the LSP.
 
-It picks based on the question it asks at install time (or the profile default with `--yes`), copies it once, and never touches it again — so the installed copy is yours to edit per machine, while the templates stay versioned here.
+The installer picks one based on the question it asks (or the profile default with `--yes`) and installs it like any other file — linked or copied per mode, and replaced on every run. Edit the variants here, not the installed copy; changes reach a machine on the next install, and switching your answer switches the file.
 
 ## tmux
 
