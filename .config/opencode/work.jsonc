@@ -20,7 +20,7 @@
       "type": "remote",
       "url": "https://mcp.asana.com/v2/mcp",
       "oauth": {
-        "clientId": "1216135129131473",
+        "clientId": "{env:ASANA_CLIENT_ID}",
         "clientSecret": "{env:ASANA_CLIENT_SECRET}",
         "scope": "tools:read tools:execute"
       }
