@@ -1,0 +1,52 @@
+// Work overlay — merged on top of base.jsonc by install.sh (jq deep merge)
+// when the work profile is selected. Holds any work-only configs
+//
+// The Asana client secret is NOT stored here; export ASANA_CLIENT_SECRET in
+// your shell environment and OpenCode substitutes it at runtime.
+//
+// NOTE: comments in this file must be full-line "//" comments (no inline
+// comments) — install.sh strips them with a line-based filter before merging.
+{
+  "provider": {
+    "amazon-bedrock": {
+      "options": {
+        "region": "us-west-2",
+        "profile": "programmatic-ai"
+      }
+    }
+  },
+  "mcp": {
+    "asana": {
+      "type": "remote",
+      "url": "https://mcp.asana.com/v2/mcp",
+      "oauth": {
+        "clientId": "1216135129131473",
+        "clientSecret": "{env:ASANA_CLIENT_SECRET}",
+        "scope": "tools:read tools:execute"
+      }
+    }
+  },
+  "permission": {
+    "bash": {
+      "python scan_claimfile.py *": "allow",
+      "python medscan_claimfile.py *": "allow"
+    },
+    // Asana MCP : gate every destructive/mutating tool.
+    // Read-only tools (asana_get_*, asana_search_*, *_preview) are ungated
+    "asana_create_tasks": "ask",
+    "asana_create_project": "ask",
+    "asana_create_project_status_update": "ask",
+    "asana_add_comment": "ask",
+    "asana_update_tasks": "ask",
+    "asana_delete_task": "ask"
+  },
+  "agent": {
+    "build": {
+      "permission": {
+        "external_directory": {
+          "/tmp/loader-builder/**": "allow"
+        }
+      }
+    }
+  }
+}

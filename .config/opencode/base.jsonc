@@ -1,28 +1,10 @@
+// Base OpenCode configuration — machine-agnostic settings only.
+// NOTE: comments must be full-line "//" to play nice with jq in the merge
 {
   "$schema": "https://opencode.ai/config.json",
   // Theme configuration
   "theme": "catppuccin-macchiato",
   "autoupdate": true,
-  "provider": {
-    "amazon-bedrock": {
-      "options": {
-        "region": "us-west-2",
-        "profile": "programmatic-ai"
-      }
-    }
-  },
-  "mcp": {
-    "asana": {
-      "type": "remote",
-      "url": "https://mcp.asana.com/v2/mcp",
-      //"enabled": true,
-      "oauth": {
-        "clientId": "1216135129131473",
-        "clientSecret": "c4f91e3487a1225d1363e7d57322dd0f",
-        "scope": "tools:read tools:execute"
-      }
-    }
-  },
   "permission": {
     "edit": {
       "*": "ask",
@@ -68,32 +50,15 @@
       "sort *": "allow",
       "echo *": "allow",
       "echo $*": "ask",
-      "python scan_claimfile.py *": "allow",
-      "python medscan_claimfile.py *": "allow",
       "npm run*": "allow",
       "npm test": "allow",
       "python -m unittest*": "allow"
     },
     "webfetch": "ask",
     "doom_loop": "ask",
-    "external_directory": "ask",
-    // Asana MCP (remote server "asana"): gate every destructive/mutating tool.
-    // Read-only tools (asana_get_*, asana_search_*, *_preview) stay ungated.
-    "asana_create_tasks": "ask",
-    "asana_create_project": "ask",
-    "asana_create_project_status_update": "ask",
-    "asana_add_comment": "ask",
-    "asana_update_tasks": "ask",
-    "asana_delete_task": "ask"
+    "external_directory": "ask"
   },
   "agent": {
-    "build": {
-      "permission": {
-        "external_directory": {
-          "/tmp/loader-builder/**": "allow"
-        }
-      }
-    },
     "plan": {
       "permission": {
         "edit": {
