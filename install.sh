@@ -64,7 +64,7 @@ record() {
 			UNCHANGED=$((UNCHANGED + 1))
 			;;
 		backup) color="$C_YELLOW" ;;
-		remove | prune)
+		prune)
 			color="$C_YELLOW"
 			CHANGED=$((CHANGED + 1))
 			;;
@@ -289,32 +289,10 @@ install_opencode() {
 		fi
 		rm -f "$tmp"
 	fi
-
-	# Migration: skills used to be installed here; they now live in
-	# ~/.agents/skills (OpenCode reads that natively).
-	local sdir="$HOME/.config/opencode/skills" src name old
-	for src in "$REPO_DIR"/agents/skills/*/; do
-		name="$(basename "$src")"
-		old="$sdir/$name"
-		if [ -d "$old" ] || [ -L "$old" ]; then
-			[ -L "$old" ] || backup_file "$old"
-			run rm -rf "$old"
-			record remove "$old" "moved to ~/.agents/skills"
-		fi
-	done
-	if [ -d "$sdir" ] && [ -z "$(ls -A "$sdir" 2>/dev/null)" ]; then
-		run rmdir "$sdir"
-	fi
 }
 
 install_agents_skills() {
 	ensure_dir "$HOME/.agents/skills"
-	# Migration: "humanize" was the old untracked name for humanizer.
-	if [ -d "$HOME/.agents/skills/humanize" ]; then
-		backup_file "$HOME/.agents/skills/humanize"
-		run rm -rf "$HOME/.agents/skills/humanize"
-		record remove "$HOME/.agents/skills/humanize" "renamed to humanizer"
-	fi
 	local src name
 	for src in "$REPO_DIR"/agents/skills/*/; do
 		name="$(basename "$src")"
