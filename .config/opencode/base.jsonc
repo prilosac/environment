@@ -23,6 +23,7 @@
       "wc *": "allow",
       "grep *": "allow",
       "head *": "allow",
+      "head *.env": "deny",
       "gh *": "ask",
       "gh pr *": "allow",
       "git blame *": "allow",
