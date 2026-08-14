@@ -24,6 +24,11 @@
         "clientSecret": "{env:ASANA_CLIENT_SECRET}",
         "scope": "tools:read tools:execute"
       }
+    },
+    "serena": {
+      "type": "local",
+      "command": ["serena", "start-mcp-server"],
+      "enabled": true
     }
   },
   "permission": {
