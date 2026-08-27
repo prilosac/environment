@@ -1,0 +1,55 @@
+// Work overlay - merged on top of base.jsonc by install.sh (jq deep merge)
+// when the work profile is selected. Holds any work-only configs
+//
+// The Asana client secret is NOT stored here; export ASANA_CLIENT_SECRET in
+// your shell environment and OpenCode substitutes it at runtime.
+//
+// NOTE: comments in this file must be full-line "//" comments (no inline
+// comments) - install.sh strips them with a line-based filter before merging.
+{
+  "providers": {
+    "amazon-bedrock": {
+      "settings": {
+        "region": "us-west-2",
+        "profile": "programmatic-ai"
+      }
+    }
+  },
+  "mcp": {
+    "servers": {
+      "asana": {
+        "type": "remote",
+        "url": "https://mcp.asana.com/v2/mcp",
+        "oauth": {
+          "client_id": "{env:ASANA_CLIENT_ID}",
+          "client_secret": "{env:ASANA_CLIENT_SECRET}",
+          "scope": "tools:read tools:execute"
+        }
+      },
+      "serena": {
+        "type": "local",
+        "command": ["serena", "start-mcp-server"],
+        "disabled": false
+      }
+    }
+  },
+  "permissions": [
+    { "action": "shell", "resource": "python scan_claimfile.py *", "effect": "allow" },
+    { "action": "shell", "resource": "python medscan_claimfile.py *", "effect": "allow" },
+    // Asana MCP: gate every destructive/mutating tool.
+    // Read-only tools (asana_get_*, asana_search_*, *_preview) are ungated
+    { "action": "asana_create_tasks", "resource": "*", "effect": "ask" },
+    { "action": "asana_create_project", "resource": "*", "effect": "ask" },
+    { "action": "asana_create_project_status_update", "resource": "*", "effect": "ask" },
+    { "action": "asana_add_comment", "resource": "*", "effect": "ask" },
+    { "action": "asana_update_tasks", "resource": "*", "effect": "ask" },
+    { "action": "asana_delete_task", "resource": "*", "effect": "ask" }
+  ],
+  "agents": {
+    "build": {
+      "permissions": [
+        { "action": "external_directory", "resource": "/tmp/loader-builder/**", "effect": "allow" }
+      ]
+    }
+  }
+}
