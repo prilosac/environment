@@ -7,7 +7,7 @@ Prefer using the `gh` cli for all GitHub actions including but not limited to cr
 
 ## PR
 
-When asked to create a PR, always start by making sure you're up to date on main and create a new branch to make the changes in. If the working environment is dirty (uncommitted files, unstaged edits, etc.), stop and ask the user how to proceed first.
+When asked to create a PR, always do so on the current branch unless otherwise specified. Stop and ask the user how to proceed if you find yourself needing to take any destructive actions.
 
 Always create draft PRs by default unless asked otherwise - CI only runs on PRs marked ready for review by a human, so this saves us CI minutes.
 
