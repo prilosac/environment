@@ -71,12 +71,6 @@ In both modes this repo is the source of truth: re-running the installer paves o
 
 Neovim configuration is stored at the canonical `.config/nvim/`. `init.lua` is the main entrypoint, and subsets of plugin configurations are stored at `.config/nvim/lua/plugins/<plugin>.lua`.
 
-The configuration uses Neovim 0.11+ APIs; individual plugins may require a newer patch release.
-
-Clipboard integration keeps `clipboard=unnamedplus` and prefers Neovim's built-in OSC 52 provider when an attached terminal advertises an OSC 52 `Ms` capability through XTGETTCAP. This uses `vim.termcap.query` on Neovim 0.11 and `vim.tty.query` on 0.12+. No response, an unsupported capability, or a non-OSC-52 sequence leaves the existing provider selection alone. The provider is reloaded after a positive response, even if it was already initialized.
-
-`Ms` advertises clipboard copying, not reading. Terminals such as Feltcode support both, so ordinary `yy` and `p` use the frontend clipboard, including with a remote backend. Other terminals may support only copying; there is no fallback after a failed clipboard operation.
-
 Environment-specific choices (currently: whether conform runs `isort` + `black` on Python) live in `~/.config/nvim/lua/local/overrides.lua`, read by `init.lua` via `require("local.overrides")`. A missing file falls back to defaults.
 
 That file is installed from one of the tracked variants in `.config/nvim/overrides/`:
