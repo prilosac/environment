@@ -92,7 +92,7 @@ vim.api.nvim_create_autocmd("UIEnter", {
 		-- vim.termcap was renamed to vim.tty in Neovim 0.12.
 		local tty = vim.fn.has("nvim-0.12") == 1 and "vim.tty" or "vim.termcap"
 		require(tty).query("Ms", function(_, supported, sequence)
-			if supported and sequence and sequence:match("^\27%]52") then
+			if supported and sequence and sequence:match("^\27%]52;") then
 				vim.g.clipboard = "osc52"
 				-- A plugin may have initialized another provider before the response.
 				vim.g.loaded_clipboard_provider = nil
