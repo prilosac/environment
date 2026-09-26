@@ -71,6 +71,10 @@ In both modes this repo is the source of truth: re-running the installer paves o
 
 Neovim configuration is stored at the canonical `.config/nvim/`. `init.lua` is the main entrypoint, and subsets of plugin configurations are stored at `.config/nvim/lua/plugins/<plugin>.lua`.
 
+The config uses Neovim 0.11+ APIs. Clipboard integration keeps the scheduled `clipboard=unnamedplus` setting and selects OSC 52 only after the attached terminal advertises an OSC 52 `Ms` capability. It uses `vim.termcap.query` on 0.11 and `vim.tty.query` on 0.12+. Unsupported or unanswered queries leave provider selection alone; a positive response reloads the provider even if a plugin initialized it earlier.
+
+The terminal must implement the advertisement as well as clipboard handling. For Feltcode, that requires its terminal-support update. `Ms` advertises copying, not clipboard reads; this config does not add fallback after a failed operation.
+
 Environment-specific choices (currently: whether conform runs `isort` + `black` on Python) live in `~/.config/nvim/lua/local/overrides.lua`, read by `init.lua` via `require("local.overrides")`. A missing file falls back to defaults.
 
 That file is installed from one of the tracked variants in `.config/nvim/overrides/`:
@@ -83,6 +87,8 @@ The installer picks one based on the question it asks (or the profile default wi
 ## tmux
 
 tmux configuration is stored at `tmux/`. `.tmux.conf` is the standard tmux config file that gets installed to `~/`. `tmux-dev [work_dir] [session_name]` is a custom launch script that launches tmux in a specified directory with a specified session name and sets up the session with two windows where the first window is split into top-bottom panes. This gets installed to `~/.local/bin`.
+
+Through tmux 3.5a, Neovim retains its tmux provider. The `Ms` override emits the clipboard selector required by mosh 1.4 while consuming both string parameters expected by tmux. Mosh does not forward the capability query, so direct mosh sessions cannot opt in this way; use tmux for copying to the frontend clipboard and pasting its yank buffer. For text copied in a local application, use the terminal's paste shortcut: mosh 1.4 does not reliably forward repeated clipboard-read requests.
 
 ## OpenCode
 

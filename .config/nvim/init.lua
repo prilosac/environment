@@ -80,6 +80,28 @@ vim.schedule(function()
 	vim.o.clipboard = "unnamedplus"
 end)
 
+-- Prefer OSC 52 only when the attached terminal advertises it via XTGETTCAP.
+-- Neovim's automatic OSC 52 fallback excludes nonempty 'clipboard' options.
+vim.api.nvim_create_autocmd("UIEnter", {
+	desc = "Prefer advertised OSC 52 clipboard support",
+	group = vim.api.nvim_create_augroup("clipboard-osc52", { clear = true }),
+	callback = function()
+		if vim.fn.has("ttyout") == 0 then
+			return
+		end
+		-- vim.termcap was renamed to vim.tty in Neovim 0.12.
+		local tty = vim.fn.has("nvim-0.12") == 1 and "vim.tty" or "vim.termcap"
+		require(tty).query("Ms", function(_, supported, sequence)
+			if supported and sequence and sequence:match("^\27%]52;") then
+				vim.g.clipboard = "osc52"
+				-- A plugin may have initialized another provider before the response.
+				vim.g.loaded_clipboard_provider = nil
+				vim.cmd.runtime("autoload/provider/clipboard.vim")
+			end
+		end)
+	end,
+})
+
 -- Enable break indent
 vim.o.breakindent = true
 
@@ -567,7 +589,7 @@ require("lazy").setup({
 
 			-- Shortcut for searching your Neovim configuration files
 			vim.keymap.set("n", "<leader>sn", function()
-				builtin.find_files({ cwd = vim.fn.stdpath("config") })
+				builtin.find_files({ cwd = vim.fn.stdpath("config"), follow = true })
 			end, { desc = "[S]earch [N]eovim files" })
 		end,
 	},
