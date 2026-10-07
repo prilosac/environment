@@ -359,7 +359,7 @@ apply_profile() {
 profile_modules() {
 	case "$1" in
 		personal) echo "tmux nvim nvim-ai opencode2 agents-skills claude-skills" ;;
-		work) echo "tmux nvim nvim-ai opencode agents-skills claude-skills" ;;
+		work) echo "tmux nvim nvim-ai opencode2 agents-skills claude-skills" ;;
 	esac
 }
 

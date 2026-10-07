@@ -23,7 +23,7 @@
         "oauth": {
           "client_id": "{env:ASANA_CLIENT_ID}",
           "client_secret": "{env:ASANA_CLIENT_SECRET}",
-          "scope": "tools:read tools:execute"
+          "redirect_uri": "http://127.0.0.1:19876/mcp/oauth/callback"
         }
       }
     }
