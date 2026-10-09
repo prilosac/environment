@@ -4,19 +4,14 @@
 import argparse
 import json
 import math
-import re
 import subprocess
 import time
-
-
-class Deadline(Exception):
-    pass
 
 
 def api(endpoint, deadline, paginated=False):
     remaining = deadline - time.monotonic()
     if remaining <= 0:
-        raise Deadline
+        raise TimeoutError
     command = ["gh", "api", endpoint]
     if paginated:
         command += ["--paginate", "--slurp"]
@@ -26,7 +21,7 @@ def api(endpoint, deadline, paginated=False):
         )
     except subprocess.TimeoutExpired as error:
         if time.monotonic() >= deadline:
-            raise Deadline from error
+            raise TimeoutError from error
         raise RuntimeError("GitHub request exceeded 30 seconds") from error
     if result.returncode:
         raise RuntimeError(result.stderr.strip() or "gh api failed")
@@ -49,18 +44,8 @@ def snapshot(repo, number, deadline):
     reviews = pages(f"{pull}/reviews", deadline)
     comments = pages(f"{root}/issues/{number}/comments", deadline)
     review_comments = pages(f"{pull}/comments", deadline)
-    checks = [
-        {"name": c["name"], "state": c["status"],
-         "conclusion": c["conclusion"], "url": c["html_url"]}
-        for c in pages(f"{root}/commits/{head}/check-runs", deadline, "check_runs")
-    ]
-    # Status history is newest first; only the latest state of each context counts.
-    statuses = {}
-    for s in pages(f"{root}/commits/{head}/statuses", deadline):
-        statuses.setdefault(s["context"], {
-            "name": s["context"], "state": s["state"], "url": s["target_url"],
-        })
-    checks.extend(statuses.values())
+    checks = pages(f"{root}/commits/{head}/check-runs", deadline, "check_runs")
+    statuses = pages(f"{root}/commits/{head}/statuses", deadline)
     latest = api(pull, deadline)
     if latest["head"]["sha"] != head:
         return None  # Discard data collected across a push; poll the new head.
@@ -73,7 +58,7 @@ def snapshot(repo, number, deadline):
             "teams": sorted(t["slug"] for t in latest["requested_teams"]),
         },
         "reviews": reviews, "comments": comments, "review_comments": review_comments,
-        "checks": sorted(checks, key=lambda c: (c["name"], c["url"] or "")),
+        "checks": checks, "statuses": statuses,
     }
 
 
@@ -88,7 +73,7 @@ def watch(repo, number, interval=60, timeout=1800):
         while time.monotonic() < deadline:
             data = snapshot(repo, number, deadline)
             if time.monotonic() >= deadline:
-                raise Deadline
+                raise TimeoutError
             if data is not None:
                 if data != previous:
                     # Keep bodies locally for edit detection, not repeated agent output.
@@ -96,8 +81,6 @@ def watch(repo, number, interval=60, timeout=1800):
                         "snapshot" if previous is None else "changed",
                         head=data["pr"]["head"], state=data["pr"]["state"],
                         areas=[k for k in data if previous is None or data[k] != previous[k]],
-                        reviews=len(data["reviews"]), comments=len(data["comments"]),
-                        review_comments=len(data["review_comments"]), checks=data["checks"],
                     )
                 if data["pr"]["state"] != "open":
                     emit("closed", head=data["pr"]["head"])
@@ -106,7 +89,7 @@ def watch(repo, number, interval=60, timeout=1800):
                     return 0
                 previous = data
             time.sleep(min(interval, max(0, deadline - time.monotonic())))
-    except Deadline:
+    except TimeoutError:
         pass
     except (OSError, RuntimeError, ValueError, KeyError, TypeError) as error:
         emit("error", message=str(error))
@@ -129,7 +112,7 @@ def main():
     parser.add_argument("--interval", type=positive, default=60, help="poll seconds (default: 60)")
     parser.add_argument("--timeout", type=positive, default=1800, help="total seconds (default: 1800)")
     args = parser.parse_args()
-    if not re.fullmatch(r"[\w.-]+/[\w.-]+", args.repo) or args.number <= 0:
+    if args.repo.count("/") != 1 or args.number <= 0:
         parser.error("expected OWNER/REPO and a positive PR number")
     return watch(**vars(args))
 
