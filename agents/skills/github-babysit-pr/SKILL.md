@@ -17,4 +17,4 @@ python3 <skill-dir>/scripts/watch_pr.py OWNER/REPO PR
 
 It waits for the next PR/review/comment/CI change: exit 0 on change or closure, 1 on timeout, 2 on error. Inspect, act, and repeat until ready; a change is not approval. Do not merge unless asked.
 
-If Python 3 is unavailable, use `gh pr checks PR --repo OWNER/REPO --watch` directly and continue checking reviews/comments with `gh`; do not ask for permission to use this fallback.
+If Python 3 is unavailable, use `gh pr checks PR --repo OWNER/REPO --watch` directly and continue checking reviews/comments with `gh`.
