@@ -9,12 +9,12 @@ Babysitting a PR means watching and iterating on it until it is ready to merge. 
 - Iteratively dealing with them by either responding with changes or ignoring them, using your best judgement
 - If asked to ensure CI goes green, mark the PR as ready for review and verify CI passes (draft PRs often do not run CI)
 
-Use the bundled watcher instead of writing a polling script (requires Python 3 and authenticated `gh`):
+Inspect the PR first, then use the bundled watcher to wait for its next change (Python 3 and existing `gh` authentication):
 
 ```sh
-python3 <skill-dir>/scripts/watch_pr.py OWNER/REPO PR --reviewer LOGIN --ci
+python3 <skill-dir>/scripts/watch_pr.py OWNER/REPO PR
 ```
 
-Use the review author's GitHub login; omit `--ci` when not waiting for CI. It prints changed JSON snapshots; exits 0 after a submitted current-head review and optional visible CI finish (or PR closure), 1 on timeout, 2 on error.
+It watches PR metadata/head, all visible reviews, discussion and inline comments, and CI. It prints compact JSON; exits 0 on change or closure, 1 on timeout, 2 on error. Inspect changes, act as needed, and repeat; an event does not mean ready to merge.
 
-Inspect reviews/comments and check results: arrival is not approval, and missing/skipped checks do not prove CI passed. Rerun after fixes and pushes. If a review never schedules, report the blocker instead of guessing request variants. Do not merge unless asked.
+If Python 3 is unavailable, report the blocker and ask how to proceed rather than installing it or writing another watcher. Do not merge unless asked.
