@@ -4,6 +4,11 @@
     "name": "catppuccin-macchiato"
   },
   "session": {
-    "permissions": "autoaccept"
+    "permissions": "autoaccept",
+    "verbosity": "low"
+  },
+  "prompt": {
+    "paste": "full",
+    "image_preview": true
   }
 }
