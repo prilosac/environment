@@ -17,3 +17,6 @@ PR descriptions should be written for a human to be able to quickly review, unde
 
 When asked for a link to test, spin up a dev server and hand the link over to the user. If the system you're on is using Tailscale, provide a Tailscale link.
 
+## Assignment
+
+Always assign the PR to @prilosac when it's ready to be reviewed.
