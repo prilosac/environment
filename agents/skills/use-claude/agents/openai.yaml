@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use Claude"
+  short_description: "Consult Claude on a task, plan, or implementation"
+  default_prompt: "Use $use-claude to get a second opinion from Claude on the current plan or implementation."

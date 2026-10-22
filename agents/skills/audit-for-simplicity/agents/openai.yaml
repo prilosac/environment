@@ -1,0 +1,4 @@
+interface:
+  display_name: "Audit for Simplicity"
+  short_description: "Simplify code while preserving behavior and boundaries"
+  default_prompt: "Use $audit-for-simplicity to simplify this code while preserving supported behavior and safety boundaries."

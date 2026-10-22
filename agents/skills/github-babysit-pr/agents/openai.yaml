@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub Babysit PR"
+  short_description: "Address PR review feedback until ready to merge"
+  default_prompt: "Use $github-babysit-pr to monitor this PR and address feedback until it is ready to merge, without merging it."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Release Notes"
+  short_description: "Draft concise GitHub release notes from tag diffs"
+  default_prompt: "Use $release-notes to draft concise GitHub release notes from the diff between the latest two release tags."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Use Codex"
+  short_description: "Consult Codex on a task, plan, or implementation"
+  default_prompt: "Use $use-codex to get a second opinion from Codex on the current plan or implementation."
