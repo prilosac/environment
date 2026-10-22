@@ -10,5 +10,8 @@
   "prompt": {
     "paste": "full",
     "image_preview": true
+  },
+  "tabs": {
+    "mode": "off"
   }
 }
