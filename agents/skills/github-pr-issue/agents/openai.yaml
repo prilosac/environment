@@ -1,0 +1,4 @@
+interface:
+  display_name: "GitHub PRs and Issues"
+  short_description: "Create and manage GitHub pull requests and issues"
+  default_prompt: "Use $github-pr-issue to create a draft GitHub pull request for the current changes."

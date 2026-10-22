@@ -108,3 +108,5 @@ The Asana MCP client secret is **not** stored in this repo. `work.jsonc` referen
 ## Agent skills
 
 Skills are stored at `agents/skills/`, one directory per skill following the [Agent Skills](https://agentskills.io/home) specification. They install to `~/.agents/skills/`, which OpenCode reads natively. Claude Code doesn't read `~/.agents`, so the `claude-skills` module symlinks each skill into `~/.claude/skills/<name>` pointing back at `~/.agents/skills/<name>` — one source of truth, two consumers.
+
+Each skill includes `agents/openai.yaml` with a display name, short description, and default prompt for OpenAI/Codex interfaces. Keep this metadata alongside the skill's `SKILL.md`.

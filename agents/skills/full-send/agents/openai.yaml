@@ -1,0 +1,4 @@
+interface:
+  display_name: "Full Send"
+  short_description: "Take an agreed change through to a merge-ready PR"
+  default_prompt: "Use $full-send to implement the agreed change and take it through validation to a merge-ready PR."
