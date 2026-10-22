@@ -1,9 +1,9 @@
 ---
 name: use-claude
-description: Unless you are Claude, Use when directly asked to talk to Claude or when you need a second pair of eyes on your plan or implementation before going back to the user.
+description: Use when directly asked to talk to Claude or when you need a second pair of eyes on your plan or implementation before going back to the user. DO NOT USE IF YOU ARE CLAUDE CODE.
 ---
 
-If you are not Claude, you should use this skill.
+Only use this skill if you are not Claude.
 
 Talk to Claude using `claude -p "<prompt>" <other-args>`
 
