@@ -5,7 +5,9 @@
   },
   "session": {
     "permissions": "autoaccept",
-    "verbosity": "low"
+    "verbosity": "low",
+    "thinking": "hide",
+    "image_preview": true
   },
   "prompt": {
     "paste": "full",
