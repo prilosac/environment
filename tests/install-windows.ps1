@@ -26,6 +26,15 @@ function Read-Jsonc($Path) {
     [regex]::Replace([IO.File]::ReadAllText($Path), '(?m)^\s*//.*$', '') | ConvertFrom-Json
 }
 
+# Cleanup must not traverse any links left by a failed test.
+function Remove-Fixture($Path) {
+    $item = Get-Item -LiteralPath $Path -Force
+    if ($item.PSIsContainer -and -not ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+        foreach ($child in Get-ChildItem -LiteralPath $Path -Force) { Remove-Fixture $child.FullName }
+    }
+    $item.Delete()
+}
+
 try {
     [void][IO.Directory]::CreateDirectory($repo)
     foreach ($name in 'install.ps1', '.config', 'agents') {
@@ -146,6 +155,14 @@ try {
     # Exercise the actual elevation handoff without opening a UAC dialog in CI.
     & {
         . $installer -Only nvim,nvim-ai -Profile work -List -Yes
+        $literal = Join-Path $root 'literal %PATH% & !'
+        [void][IO.Directory]::CreateDirectory($literal)
+        [IO.File]::WriteAllText((Join-Path $literal 'keep.txt'), 'literal target')
+        foreach ($kind in 'SymbolicLink', 'Junction') {
+            $alias = Join-Path $root ($kind + ' %PATH% & !')
+            New-Link $literal $alias $kind
+            Assert ([IO.File]::ReadAllText((Join-Path $alias 'keep.txt')) -eq 'literal target') 'Link paths were expanded as commands'
+        }
         function Start-Process {
             param($FilePath, $Verb, [switch]$Wait, [switch]$PassThru, $ArgumentList)
             Assert ($Verb -eq 'RunAs' -and $Wait -and $PassThru) 'Wrong elevation invocation'
@@ -170,5 +187,5 @@ try {
     throw
 } finally {
     foreach ($name in $savedEnv.Keys) { [Environment]::SetEnvironmentVariable($name, $savedEnv[$name]) }
-    if (Test-Path -LiteralPath $root) { [IO.Directory]::Delete($root, $true) }
+    if (Test-Path -LiteralPath $root) { Remove-Fixture $root }
 }

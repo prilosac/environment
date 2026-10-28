@@ -105,10 +105,19 @@ function Backup-Item($Path) {
             Sort-Object Name -Descending | Select-Object -Skip 4)
         foreach ($dir in $old) {
             Write-Record 'prune' $dir.FullName '(keeping 5 most recent backups)'
-            # Directory.Delete removes nested directory links without traversing their targets.
-            if (-not $DryRun) { [IO.Directory]::Delete($dir.FullName, $true) }
+            if (-not $DryRun) { Remove-Tree $dir.FullName }
         }
     }
+}
+
+# Recursive Directory.Delete can mistake junctions for volume mount points on older .NET.
+# Delete each link directly, without traversing its target.
+function Remove-Tree($Path) {
+    $item = Get-Item -LiteralPath $Path -Force
+    if ($item.PSIsContainer -and -not ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+        foreach ($child in Get-ChildItem -LiteralPath $Path -Force) { Remove-Tree $child.FullName }
+    }
+    $item.Delete()
 }
 
 function Prepare-Destination($Destination) {
