@@ -1,0 +1,23 @@
+name: Windows installer
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths:
+      - install.ps1
+      - tests/install-windows.ps1
+      - .config/**
+      - agents/**
+      - .github/workflows/windows.yml
+jobs:
+  install:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shell: [powershell, pwsh]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Exercise native Windows filesystem and installer behavior
+        shell: ${{ matrix.shell }}
+        run: ./tests/install-windows.ps1
