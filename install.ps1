@@ -105,13 +105,11 @@ function Backup-Item($Path) {
             Sort-Object Name -Descending | Select-Object -Skip 4)
         foreach ($dir in $old) {
             Write-Record 'prune' $dir.FullName '(keeping 5 most recent backups)'
-            if (-not $DryRun) { Remove-Tree $dir.FullName }
+            # Directory.Delete removes nested directory links without traversing their targets.
+            if (-not $DryRun) { [IO.Directory]::Delete($dir.FullName, $true) }
         }
     }
 }
-
-# Directory.Delete removes nested directory links without traversing their targets.
-function Remove-Tree($Path) { [IO.Directory]::Delete($Path, $true) }
 
 function Prepare-Destination($Destination) {
     for ($parent = Split-Path -Parent $Destination; $parent; $parent = Split-Path -Parent $parent) {
@@ -184,7 +182,7 @@ function Render-OpenCode($Version) {
         $permissions = @(@($base.permissions) + @($overlay.permissions) | Where-Object { $null -ne $_ })
         $overlay['permissions'] = $permissions
         foreach ($name in $overlay.agents.Keys) {
-            $original = $base.agents[$name]
+            $original = if ($base.agents) { $base.agents[$name] }
             if ($null -ne $original.permissions -and $null -ne $overlay.agents[$name].permissions) {
                 $overlay.agents[$name]['permissions'] = @($original.permissions) + @($overlay.agents[$name].permissions)
             }
