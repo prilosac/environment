@@ -19,5 +19,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Exercise native Windows filesystem and installer behavior
-        shell: ${{ matrix.shell }}
-        run: ./tests/install-windows.ps1
+        shell: pwsh
+        run: ${{ matrix.shell }} -NoProfile -ExecutionPolicy Bypass -File ./tests/install-windows.ps1

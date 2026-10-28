@@ -1350,7 +1350,10 @@ require("lazy").setup({
 		build = ":TSUpdate",
 		config = function()
 			local treesitter = require("nvim-treesitter")
-			treesitter.setup({})
+			-- Register an existing runtime directory so first-time installs are discoverable.
+			local install_dir = vim.fn.stdpath("data") .. "/site"
+			vim.fn.mkdir(install_dir, "p")
+			treesitter.setup({ install_dir = install_dir })
 			treesitter.install({
 				"bash",
 				"c",
