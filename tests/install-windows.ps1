@@ -48,7 +48,8 @@ try {
     Run-Installer @('-Only', 'tmux', '-DryRun') 1 | Out-Null
     Run-Installer @('-Copy', '-Link', '-DryRun') 1 | Out-Null
     Run-Installer @('-List', '-Skip', 'nvim-ai') | Out-Null
-    Assert (-not (Test-Path -LiteralPath $env:USERPROFILE)) 'Read-only commands wrote files'
+    $created = @(Get-ChildItem -LiteralPath $env:USERPROFILE -Recurse -Force -ErrorAction SilentlyContinue)
+    Assert (-not (Test-Path -LiteralPath $env:USERPROFILE)) "Read-only commands wrote files: $($created.FullName -join ', ')"
 
     Run-Installer @('-Profile', 'personal', '-Copy', '-Yes') | Out-Null
     Assert ((Get-Item -LiteralPath $claude).LinkType -eq 'Junction') 'Copy mode must use Claude junctions'
