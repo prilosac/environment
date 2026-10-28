@@ -126,6 +126,24 @@ function Prepare-Destination($Destination) {
     if (-not $DryRun) { New-Directory (Split-Path -Parent $Destination) }
 }
 
+function New-Link($Source, $Destination, $Kind) {
+    # Older New-Item versions treat link targets as wildcards. mklink uses literal paths.
+    $flag = if ($Kind -eq 'Junction') { '/J' } elseif ([IO.Directory]::Exists($Source)) { '/D' } else { '' }
+    $info = [Diagnostics.ProcessStartInfo]::new($env:ComSpec)
+    $info.UseShellExecute = $false
+    $info.RedirectStandardOutput = $true
+    # Expand paths once from the child environment, keeping %, &, and ! literal.
+    $info.EnvironmentVariables['ENVIRONMENT_LINK'] = $Destination
+    $info.EnvironmentVariables['ENVIRONMENT_TARGET'] = $Source
+    $info.Arguments = '/d /v:off /c mklink ' + $flag + ' "%ENVIRONMENT_LINK%" "%ENVIRONMENT_TARGET%"'
+    $process = [Diagnostics.Process]::Start($info)
+    try {
+        [void]$process.StandardOutput.ReadToEnd()
+        $process.WaitForExit()
+        if ($process.ExitCode -ne 0) { throw "Could not create $Kind at '$Destination'." }
+    } finally { $process.Dispose() }
+}
+
 function Install-Path($Source, $Destination, $Kind = $Mode) {
     if ($Source -eq $Destination) { throw "Source and destination are the same: $Source" }
     $item = Get-InstalledItem $Destination
@@ -140,7 +158,7 @@ function Install-Path($Source, $Destination, $Kind = $Mode) {
         if ($Kind -eq 'Copy') {
             Copy-Item -LiteralPath $Source -Destination $Destination -Recurse -Force
         } else {
-            New-Item -ItemType $Kind -Path $Destination -Value $Source | Out-Null
+            New-Link $Source $Destination $Kind
         }
     }
     Write-Record $Kind.ToLowerInvariant() $Destination "<- $Source"

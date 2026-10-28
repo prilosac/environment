@@ -88,7 +88,8 @@ try {
 
     # A pre-existing whole-config junction must not cause writes into the source checkout.
     [IO.Directory]::Delete($nvim, $true)
-    New-Item -ItemType Junction -Path $nvim -Value (Join-Path $repo '.config/nvim') | Out-Null
+    cmd /d /c mklink /J $nvim (Join-Path $repo '.config/nvim') | Out-Null
+    Assert ($LASTEXITCODE -eq 0) 'Could not create whole-config junction fixture'
     Run-Installer @('-Only', 'nvim', '-Yes') 1 | Out-Null
     Assert ((Get-FileHash -LiteralPath (Join-Path $repo '.config/nvim/init.lua')).Hash -eq $original) 'Linked parent damaged the source'
     (Get-Item -LiteralPath $nvim).Delete()
@@ -164,6 +165,9 @@ try {
         Assert $cancelled 'Elevation cancellation was swallowed'
     }
     Write-Host "PASS: Windows installer ($($PSVersionTable.PSVersion))"
+} catch {
+    Write-Host $_
+    throw
 } finally {
     foreach ($name in $savedEnv.Keys) { [Environment]::SetEnvironmentVariable($name, $savedEnv[$name]) }
     if (Test-Path -LiteralPath $root) { [IO.Directory]::Delete($root, $true) }
