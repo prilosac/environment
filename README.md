@@ -115,7 +115,7 @@ The config requires Neovim 0.12+. Clipboard integration keeps the scheduled `cli
 Install these prerequisites separately and make their executables available on Neovim's `PATH`:
 
 - Git (plugin downloads), ripgrep (`rg`, Telescope searches), Node.js (Copilot and Pyright), and curl 8+ (Copilot Chat).
-- Tree-sitter CLI 0.26.1+ from a package manager or upstream release, a supported C compiler, and `tar`/`curl` for parser downloads and builds. The current Tree-sitter plugin installs the configured parsers and adds supported languages as their filetypes are opened. Highlighting and indentation attach after installation; Ruby retains Vim regex highlighting and its existing indentation.
+- Tree-sitter CLI 0.26.1+ from a package manager or upstream release, a supported C compiler, and `tar`/`curl` for parser downloads and builds. The Tree-sitter plugin installs an explicit parser list, including Python and JavaScript. Use `:TSInstall <language>` for additional languages; reopen the file after installation finishes to enable highlighting and indentation. Ruby retains Vim regex highlighting and its existing indentation.
 - Optional formatters: `black` and `isort` for the personal Python profile, and `prettierd` or `prettier` for JavaScript. Mason installs LuaLS, Pyright, and StyLua on first use.
 - A Nerd Font selected in your terminal for the configured icons.
 

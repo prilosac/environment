@@ -1359,10 +1359,12 @@ require("lazy").setup({
 				"c",
 				"diff",
 				"html",
+				"javascript",
 				"lua",
 				"luadoc",
 				"markdown",
 				"markdown_inline",
+				"python",
 				"query",
 				"vim",
 				"vimdoc",
@@ -1370,32 +1372,14 @@ require("lazy").setup({
 			vim.api.nvim_create_autocmd("FileType", {
 				group = vim.api.nvim_create_augroup("treesitter-start", { clear = true }),
 				callback = function(event)
-					local lang = vim.treesitter.language.get_lang(event.match)
-					if not lang then
+					if not pcall(vim.treesitter.start, event.buf) then
 						return
 					end
-					local function start()
-						if not vim.api.nvim_buf_is_valid(event.buf) or vim.bo[event.buf].filetype ~= event.match then
-							return
-						end
-						if pcall(vim.treesitter.start, event.buf, lang) then
-							if event.match == "ruby" then
-								vim.bo[event.buf].syntax = "ruby"
-							else
-								vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-							end
-							return true
-						end
+					if event.match == "ruby" then
+						vim.bo[event.buf].syntax = "ruby"
+					else
+						vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
 					end
-					-- Attach immediately when installed, and after asynchronous first-time installs.
-					if start() or not vim.list_contains(treesitter.get_available(), lang) then
-						return
-					end
-					treesitter.install({ lang }):await(vim.schedule_wrap(function(err, installed)
-						if not err and installed then
-							start()
-						end
-					end))
 				end,
 			})
 		end,
