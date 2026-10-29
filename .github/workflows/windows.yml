@@ -18,6 +18,6 @@ jobs:
         shell: [powershell, pwsh]
     steps:
       - uses: actions/checkout@v4
-      - name: Exercise native Windows filesystem and installer behavior
+      - name: Check installed files are readable at expected paths
         shell: pwsh
         run: ${{ matrix.shell }} -NoProfile -ExecutionPolicy Bypass -File ./tests/install-windows.ps1
