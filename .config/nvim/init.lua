@@ -416,11 +416,15 @@ require("lazy").setup({
 
 				-- `build` is used to run some command when the plugin is installed/updated.
 				-- This is only run then, not every time Neovim starts up.
-				build = "make",
+				build = vim.fn.has("win32") == 1 and vim.fn.executable("make") == 0 and "mingw32-make" or "make",
 
 				-- `cond` is a condition used to determine whether this plugin should be
 				-- installed and loaded.
 				cond = function()
+					if vim.fn.has("win32") == 1 then
+						return vim.fn.executable("gcc") == 1
+							and (vim.fn.executable("make") == 1 or vim.fn.executable("mingw32-make") == 1)
+					end
 					return vim.fn.executable("make") == 1
 				end,
 			},
@@ -1342,47 +1346,42 @@ require("lazy").setup({
 	{ -- Highlight, edit, and navigate code
 		"nvim-treesitter/nvim-treesitter",
 		branch = "main",
+		lazy = false,
 		build = ":TSUpdate",
-		main = "nvim-treesitter.config", -- Sets main module to use for opts
-		opts = {
-			ensure_installed = {
+		config = function()
+			local treesitter = require("nvim-treesitter")
+			-- Register an existing runtime directory so first-time installs are discoverable.
+			local install_dir = vim.fn.stdpath("data") .. "/site"
+			vim.fn.mkdir(install_dir, "p")
+			treesitter.setup({ install_dir = install_dir })
+			treesitter.install({
 				"bash",
 				"c",
 				"diff",
 				"html",
+				"javascript",
 				"lua",
 				"luadoc",
 				"markdown",
 				"markdown_inline",
+				"python",
 				"query",
 				"vim",
 				"vimdoc",
-			},
-			-- Autoinstall languages that are not installed
-			auto_install = true,
-			highlight = {
-				enable = true,
-				-- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-				--  If you are experiencing weird indenting issues, add the language to
-				--  the list of additional_vim_regex_highlighting and disabled languages for indent.
-				additional_vim_regex_highlighting = { "ruby" },
-			},
-			indent = { enable = true, disable = { "ruby" } },
-		},
-		config = function(_, opts)
-			-- [[ Configure Treesitter ]] See `:help nvim-treesitter`
-
-			-- Prefer git instead of curl in order to improve connectivity in some environments
-			require("nvim-treesitter.install").prefer_git = true
-			---@diagnostic disable-next-line: missing-fields
-			require("nvim-treesitter.config").setup(opts)
-
-			-- There are additional nvim-treesitter modules that you can use to interact
-			-- with nvim-treesitter. You should go explore a few and see what interests you:
-			--
-			--    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-			--    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-			--    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+			})
+			vim.api.nvim_create_autocmd("FileType", {
+				group = vim.api.nvim_create_augroup("treesitter-start", { clear = true }),
+				callback = function(event)
+					if not pcall(vim.treesitter.start, event.buf) then
+						return
+					end
+					if event.match == "ruby" then
+						vim.bo[event.buf].syntax = "ruby"
+					else
+						vim.bo[event.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+					end
+				end,
+			})
 		end,
 	},
 	{
