@@ -13,7 +13,7 @@ Always create a PR on the current branch unless otherwise specified. Stop and as
 
 Always create PRs as drafts until they are finalized or asked otherwise - CI only runs on PRs marked ready for review by a human, so this saves us CI minutes.
 
-PR descriptions should be written for a human to be able to quickly review, understand the scope of the change and it's impact, and allow them to easily verify changes. To this end, include Mermaid diagrams, screenshots, short videos, or whatever artefacts are applicable for this change. The PR needs to contain irrefutable proof to convince the reviewer that the changes achieve the desired means and give them confidence it was done in a reasonable way.
+PR descriptions should be written for a human to be able to quickly review, understand the scope of the change and its impact, and allow them to easily verify changes. To this end, include Mermaid diagrams, screenshots, short videos, or whatever artefacts are applicable for this change. The PR needs to contain irrefutable proof to convince the reviewer that the changes achieve the desired means and give them confidence it was done in a reasonable way.
 
 End the description with the public model name and harness that made the changes, for example Created with <model> in <harness>. Include subagent models that wrote part of the change. Use the model name the harness reports. If model identity is unavailable, name the harness without guessing a model.
 

@@ -13,7 +13,7 @@ Only assume full autonomy (and thus, only follow the below instructions) when ex
 
 ### Implement the change
 
-First implement the proposal agreed upon (if there is one) with the smallet change that works. Follow all agreed upon principles and best practices, and align with existing codebase patterns and design.
+First implement the proposal agreed upon (if there is one) with the smallest change that works. Follow all agreed upon principles and best practices, and align with existing codebase patterns and design.
 
 Iterate, test, and refine the code until you're happy with it. Make sure not to introduce regressions. Make sure to validate your work as you build - test the code, take and review screenshots and recordings if applicable, etc.
 
