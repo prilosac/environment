@@ -1,10 +1,10 @@
 ---
 name: use-codex
-description: Use when directly asked to talk to Codex or when you need a second pair of eyes on your plan or implementation before going back to the user. DO NOT USE IF YOU ARE CODEX OR OTHERWISE HAVE ACCESS TO GPT MODELS NATIVELY
+description: Use as a fallback when needing to consult with Codex if your harness doesn't natively support Codex subagents.
 ---
 
-Only use this skill if you are not Codex or otherwise have access to gpt models natively.
+Do not use this skill if the current harness has native Codex/GPT subagent capability.
 
-Talk to Claude using `codex  "<prompt>" <other-args>`
+Otherwise, talk to Codex using `codex  "<prompt>" <other-args>`
 
 Unless otherwise specified by the user, specify GPT 6.1 Sol.
