@@ -1,0 +1,4 @@
+interface:
+  display_name: "deslop"
+  short_description: "Remove AI-generated code slop and clean up code style"
+  default_prompt: "Use $deslop to remove AI-generated code slop and clean up code style."
