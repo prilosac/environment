@@ -5,7 +5,7 @@ description: Use when asked to create or interact with a GitHub PR or Issue
 
 Prefer using the `gh` cli for all GitHub actions including but not limited to creating, editing, or commenting on issues and PRs. Use the `gh` CLI --attach flag where available when attaching images to issues and PRs. Older versions of the GitHub CLI don't support --attach; fallback to putting images in `.github/screenshots/` within the repo, and link to them.
 
-Use the "humanizer" skill to improve your prose if it's available in this environment.
+Use the "humanize" skill to improve your prose if it's available in this environment.
 
 ## PR
 

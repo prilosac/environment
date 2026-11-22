@@ -5,9 +5,19 @@ description: Use when told to "full send" a code change in a project.
 
 # Full Send
 
-When asked to full send, your job is to take what's been discussed and work end-to-end autonomously to see it all the way through to a ready-to-merge PR. Implement the change, validate it, and get a finalized PR up.
+When asked to full send, your job is to take what's been discussed and work end-to-end autonomously to see it all the way through to a ready-to-merge change. Implement the change, validate it, and get a finalized change ready.
 
 Only assume full autonomy (and thus, only follow the below instructions) when explicitly asked to "full send" in a clear way.
+
+## Context
+
+Figure out what environment you're in. If remote is a GitHub URL, you're in GitHub. If remote is a different URL and most commits in the history have a Gerrit-style Change-Id, then it's Gerrit. Otherwise it's unknown.
+
+In GitHub environments, call the skill tool for "github-pr-issue" and "github-babysit-pr" if they're available in this environment to carry a PR through to ready. Use them when finishing up the implementation to make a PR and babysit it until it's ready.
+
+In Gerrit environments, we use CRs which are based on a single commit on top of main. --amend a single commit as needed when making changes so that the final ready-to-review commit is one commit on top of main. Do not push anything up in Gerrit environments unless explicitly asked, and when asked, use `git review` to do so.
+
+In unknown environments, don't do anything extra.
 
 ## Process
 
@@ -20,10 +30,12 @@ Iterate, test, and refine the code until you're happy with it. Make sure not to 
 Guiding principles:
 
 - simplicity
-- succinct tests. keep them narrow and focused
+- succinct tests. keep them narrow and focused if they exist
 - prefer new primitives over "hacks"
 
 All in all, this can be summed up as "as much code as necessary, but no more".
+
+Whenever writing text for a human to read (comments, PR descriptions, etc.), use the "humanize" skill to humanize it.
 
 ### Prove it
 
@@ -35,19 +47,18 @@ Call the skill for "audit-for-simplicity", "use-claude", and "use-codex", and/or
 
 Depending on the complexity of the change, do an appropriate combination of:
 
-- Subagent reviews. Use as many Luna/Haiku-tier subagents as you want. Use 6.1 Sol/Opus 5.5-tier subagents for heavier work. Never use Astra/Fable tier subagents without explicity permission.
+- Subagent reviews. Use as many Luna/Haiku-tier subagents as you want. Use 6.1 Sol/Opus 5.5-tier subagents for heavier work. Never use Astra/Fable tier subagents without explicit permission.
 - Other-agent reviews. Use Claude or Codex (whichever you are not, or both if you are neither) to review your changes. Bounce back and forth with them until you both agree on the change. You have final say, if you ultimately cannot agree, but inform the user of this.
 - Audits for simplicity. Do as many rounds as you think you should - a good baseline is continuing until no more valid improvements come up.
+- Call the "deslop" skill if it's available and deslop this code
 
 If this project has CI, make sure CI is green. 
 
 ### Finishing up
 
-Get these changes pushed up, create a PR for this, and babysit it until it's ready.
+Follow your environment-specific instructions for getting the change ready to merge.
 
-Call the skill tool for "github-pr-issue" and "github-babysit-pr" if they're available in this environment.
-
-Never merge the PR, instead get it just up to being ready to merge, and hand it back to the user.
+Never merge on your own, instead get it just up to being ready to merge, and hand it back to the user.
 
 ## Proof
 

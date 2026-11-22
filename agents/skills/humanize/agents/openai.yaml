@@ -1,0 +1,4 @@
+interface:
+  display_name: "Humanize"
+  short_description: "Cut AI tells from writing"
+  default_prompt: "Use $humanize to remove AI tells from writing."

@@ -3,7 +3,7 @@ name: use-claude
 description: Use as a fallback when needing to consult with Claude if your harness doesn't natively support Claude subagents.
 ---
 
-Do not use this skill if the current harness has native Claude subagent capability.
+Do not use this skill if the current harness has native Claude subagent capability or `claude` is not set up on this computer.
 
 Otherwise, walk to Claude using `claude -p "<prompt>" <other-args>`
 
