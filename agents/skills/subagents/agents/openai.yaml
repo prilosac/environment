@@ -1,0 +1,4 @@
+interface:
+  display_name: "Subagents"
+  short_description: "Use subagents"
+  default_prompt: "Use $subagents to guide subagent use."

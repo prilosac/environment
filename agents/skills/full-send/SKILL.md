@@ -43,12 +43,12 @@ Get proof for every change made. See "Proof".
 
 ### Finalize the code with feedback
 
-Call the skill for "audit-for-simplicity", "use-claude", and "use-codex", and/or harness subagents if they're available in this environment:
+Call the skills for "audit-for-simplicity" and "subagents".
 
 Depending on the complexity of the change, do an appropriate combination of:
 
-- Subagent reviews. Use as many Luna/Haiku-tier subagents as you want. Use 6.2 Sol/Opus 5.5-tier subagents for heavier work. Never use Astra/Fable tier subagents without explicit permission.
-- Other-agent reviews. Use Claude or Codex (whichever you are not, or both if you are neither) to review your changes. Bounce back and forth with them until you both agree on the change. You have final say, if you ultimately cannot agree, but inform the user of this.
+- Subagent reviews.
+- Other-agent reviews. Use Claude or GPT (whichever you are not, or both if you are neither) subagents to review your changes. Bounce back and forth with them until you both agree on the change. You have final say if you ultimately cannot agree, but inform the user of this.
 - Audits for simplicity. Do as many rounds as you think you should - a good baseline is continuing until no more valid improvements come up.
 - Call the "deslop" skill if it's available and deslop this code
 
